@@ -22,7 +22,7 @@ namespace PhoneBook
 
             for (int i = 0; i < contactsArray.GetLength(0); i++)
             {
-                Console.WriteLine(contactsArray[i, 0] + " " + contactsArray[i, 1]);
+                Console.WriteLine($"{contactsArray[i, 0]} {contactsArray[i, 1]}");
             }
 
         }
