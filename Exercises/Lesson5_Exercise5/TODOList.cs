@@ -205,9 +205,7 @@ namespace Lesson5_Exercise5
                     {
                         isWorking = false;
                     }
-
-
-              
+          
             }
         }
     }
