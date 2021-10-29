@@ -47,11 +47,14 @@ namespace Lesson8_Exercise1
                     if (settings[key] == null)
                     {
                         settings.Add(key, value);
+
                     }
                     else
                     {
                         settings[key].Value = value;
+                        
                     }
+
                     configFile.Save(ConfigurationSaveMode.Modified);
                     ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
                 }
