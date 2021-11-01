@@ -103,7 +103,7 @@ namespace Lesson1_Exercise3_Algs
 
             try
             {
-                var actual = FiboR(testCase.inParam);
+                var actual = FiboNoR(testCase.inParam);
 
                 if (actual == testCase.Expected)
                 {
