@@ -6,7 +6,7 @@ namespace Lesson3_Exercise1_Algs
 {
 
  
-
+    //BenchmarkTest
     public class Program
     {
         public class PointClass
