@@ -1,14 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lesson9_Coursework
 {
+
+
+    /*
+     * Класс для логической работы с данными
+     * Под каждый запрос пользователя этот класс имеет отдельный метод, который передает данные для логической обработки
+     * классу ManipulationLogic, а затем, передаёт обработанные данные классу UIDraw для отрисовки.
+     * Также, в этом классе, отлавливаются ошибки.
+     */
     class ManipulationLogic
     {
+        /*
+    * Метод CopyFolderLogic копирует папку.
+    * После передачи пути, начинает пробигаться по папке, которую нужно скопировать.
+    * Каждый подуровень начинается с поиска файлов. Если находит, копирует файлы в новую папку если нет, начинает искать папки.
+    * Если папки есть, то создает папки в новой директори серкально с директорией-источником.
+    */
         public static void CopyFolderLogic(string sourcePath, string destinationPath)
         {
 
@@ -42,6 +52,12 @@ namespace Lesson9_Coursework
 
         }
 
+        /*
+    * Метод DeleteFolderLogic удаляет папку.
+    * После передачи пути и считывания всего содержимого в папке, начинает пробигаться по массиву и удалять файлы и папки.
+    * Если удалять файл либо папку не получается, изменяет атрибут доступа на Normal, тогда файл либо папка может удалиться.
+    * 
+    */
         public static void DeleteFolderLogic(string folderPath)
         {
             var files = Directory.GetFileSystemEntries(folderPath, "*", SearchOption.AllDirectories);
@@ -60,6 +76,10 @@ namespace Lesson9_Coursework
                         File.SetAttributes(files[i], FileAttributes.Normal);
                         File.Delete(files[i]);
                     }
+                    catch
+                    {
+                        UIDraw.WriteMessage($"При удалении файла {new FileInfo(files[i]).Name} что-то пошло не так");
+                    }
                 }
                 else
                 {
@@ -70,8 +90,15 @@ namespace Lesson9_Coursework
                     }
                     catch
                     {
-                        new DirectoryInfo(files[i]).Attributes = FileAttributes.Normal;
-                        Directory.Delete(files[i]);
+                        if (Directory.Exists(files[i]))
+                        {
+                            new DirectoryInfo(files[i]).Attributes = FileAttributes.Normal;
+                            Directory.Delete(files[i]);
+                        }
+                        else
+                        {
+                            UIDraw.WriteMessage($"При удалении папки{new DirectoryInfo(files[i]).Name} что-то пошло не так");
+                        }
                     }
 
                 }
@@ -81,27 +108,41 @@ namespace Lesson9_Coursework
             Directory.Delete(folderPath);
         }
 
+
+        //Коприует файл
         public static void CopyFileLogic(string sourcePath, string destinationPath)
         {
             File.Copy(sourcePath, destinationPath, true);
         }
 
-
+        //Удаляет файл
         public static void DeleteFileLogic(string filePath)
         {
 
             File.Delete(filePath);
         }
 
-        public static (string[] filesArr, int lastIndex) GetFileCatPageLeft(string[] files, bool isFirstPage, int lastIndex, int itemsNumber = 20)
+
+        /*
+        * Метод GetFileCatPageLeft перемещается по массиву айтемов влево.
+        * Возвращает индекс, с которого надо начинать при следуюущем вызове метода GetFileCatPageLeft.
+        * Также, возвращает индекс, с которго начинает передвигаться метод GetFileCatPageRight;
+        * Уменьшает тек. номер страницы
+        */
+
+        public static (string[] filesArr, int nextLowerIndex, int nextUpperIndex, int currentPage)
+        GetFileCatPageLeft(string[] files, bool isFirstPage, int currentIndex, int currentPage, int totalPages, int itemsNumber = 20)
         {
             var tempArr = new string[itemsNumber];
 
-            int last;
+            int nextLower;
+            int nextUpper;
+            int curPage;
 
-            int lowerbound = (lastIndex - itemsNumber) < files.GetLowerBound(0) ? 0 : lastIndex - itemsNumber;
-            int upperBound = lowerbound + itemsNumber > files.GetUpperBound(0) ? files.GetUpperBound(0) : itemsNumber;
+            int lowerbound = (currentIndex - itemsNumber) < files.GetLowerBound(0) ? 0 : currentIndex;
+            int upperBound = lowerbound + itemsNumber > files.GetUpperBound(0) ? files.Length : itemsNumber;
 
+            //Отображает элементы от текущего индекса
             if (!isFirstPage)
             {
                 for (int i = lowerbound, y = 0, counter = 0; counter < upperBound; i++, y++, counter++)
@@ -118,35 +159,73 @@ namespace Lesson9_Coursework
                 }
             }
 
-            if ((lastIndex - itemsNumber) < files.GetLowerBound(0))
+            //проверки на выход за границы. + уменьшение счётчика страниц + смещение индексов
+            if (currentIndex - itemsNumber < 0)
             {
-                last = lastIndex;
+                if (currentPage == 1 && totalPages == 1)
+                {
+                    nextLower = currentIndex;
+                    nextUpper = currentIndex;
+                    curPage = currentPage;
+                }
+                else
+                {
+                    nextLower = currentIndex;
+                    nextUpper = currentIndex + itemsNumber;
+                    if (currentPage - 1 < 1)
+                    {
+                        curPage = currentPage;
+                    }
+                    else
+                    {
+                        curPage = currentPage - 1;
+                    }
+                }
             }
             else
             {
-                last = lastIndex - (itemsNumber - 1);
+                nextLower = currentIndex - itemsNumber;
+                nextUpper = currentIndex + itemsNumber;
+
+                if (currentPage - 1 < 1)
+                {
+                    curPage = currentPage;
+                }
+                else
+                {
+                    curPage = currentPage - 1;
+                }
             }
 
-            return (tempArr, last);
+            return (tempArr, nextLower, nextUpper, curPage);
 
 
         }
 
 
-        
 
-        public static (string[] filesArr, int lastIndex) GetFileCatPageRight(string[] files, bool isFirstPage, int lastIndex, int itemsNumber = 20)
+        /*
+        * Метод GetFileCatPageRight перемещается по массиву айтемов врпаво.
+        * Возвращает индекс, с которого надо начинать при следуюущем вызове метода GetFileCatPageRight.
+        * Также, возвращает индекс, с которго начинает передвигаться метод GetFileCatPageLeft;
+        * Увеличивает тек. номер страницы
+        */
+
+        public static (string[] filesArr, int nextStartIndex, int prevIndex, int currentPage)
+        GetFileCatPageRight(string[] files, bool isFirstPage, int lastIndex, int currentPage, int totalPages, int itemsNumber = 20)
         {
 
             var tempArr = new string[itemsNumber];
+            int currentIndex = lastIndex;
 
-            int last;
+            int nextStartIndex;
+            int nexLowerIndex;
+            int curPage;
 
-            int upperBound = ((lastIndex + 1) + itemsNumber) > files.GetUpperBound(0) ? itemsNumber - (((lastIndex) + itemsNumber) - files.GetUpperBound(0)) : itemsNumber;
-        
-            if (!isFirstPage)
-            {
-                for (int i = lastIndex + 1, y = 0, counter = 0; counter <= upperBound - 1; i++, y++, counter++)
+            int upperBound = (currentIndex + itemsNumber) > files.GetUpperBound(0) ? itemsNumber - ((currentIndex + itemsNumber) - files.GetUpperBound(0) - 1 ) : itemsNumber;
+
+            //Отображает элементы от текущего индекса
+                for (int i = currentIndex, y = 0, counter = 0; counter <= upperBound - 1; i++, y++, counter++)
                 {
                     try
                     {
@@ -158,37 +237,51 @@ namespace Lesson9_Coursework
                     }
 
                 }
-            }
-            else
-            {
-                for (int i = lastIndex, y = 0, counter = 0; counter <= upperBound - 1; i++, y++,counter++)
-                {
-                    try
-                    {
-                        tempArr[y] = File.Exists(files[i]) ? $"{Path.GetFileName(files[i])} - Файл " : $"{new DirectoryInfo(files[i]).Name} - Папка";
-                    }
-                    catch
-                    {
-                        tempArr[y] = "не удалось получить информацию о элементе";
-                    }
 
+            //проверки на выход за границы. + увеличивание счётчика страниц + смещение индексов
+            if (currentIndex + itemsNumber > files.GetUpperBound(0))
+            {
+                if (currentPage == 1 && totalPages == 1)
+                {
+                    nextStartIndex = currentIndex;
+                    nexLowerIndex = currentIndex;
+                    curPage = currentPage;
+                }
+                else
+                {
+                    nextStartIndex = lastIndex;
+                    nexLowerIndex = currentIndex - itemsNumber;
+
+                    if (currentPage + 1 > totalPages)
+                    {
+                        curPage = currentPage;
+                    }
+                    else
+                    {
+                        curPage = currentPage + 1;
+                    }
                 }
             }
-
-
-            if (((lastIndex + 1) + itemsNumber) > files.GetUpperBound(0))
-            {
-                last = lastIndex;
-            }
             else
             {
-                last = lastIndex + (itemsNumber - 1);
+                nextStartIndex = lastIndex + itemsNumber;
+                nexLowerIndex = currentIndex - itemsNumber;
+                if (currentPage + 1 > totalPages)
+                {
+                    curPage = currentPage;
+                }
+                else
+                {
+                    curPage = currentPage + 1;
+                }
+
             }
 
-            return (tempArr, last);
+            return (tempArr, nextStartIndex, nexLowerIndex, curPage);
 
         }
 
+        //Получает информацию о папке, чтобы получить размер папки пробегает по всем файлам и считыает из размер, потом складывает.
         public static string GetDirInfo(string path)
         {
             long totalFolderSize = 0;
@@ -211,6 +304,7 @@ namespace Lesson9_Coursework
         }
 
 
+        //Получает информацию о файле
         public static string GetFileInfo(string path)
         {
             var file = new FileInfo(path);

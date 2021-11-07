@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Lesson9_Coursework
 {
+    /*
+     * Класс для для отображения данных на консоле
+     */
     public static class UIDraw
     {
 
@@ -43,14 +46,6 @@ namespace Lesson9_Coursework
 
         }
 
-
-
-        public static void DrawInfo(string path)
-        {
-
-
-        }
-
         public static void WriteMessage(string message)
         {
             Console.WriteLine(message);
@@ -58,14 +53,16 @@ namespace Lesson9_Coursework
 
         public static void ShowHelp()
         {
-
-            Console.WriteLine("Чтобы скопировать файл введите >cpf [полный путь к файлу] [куда скопировать, с каким именем]");
-            Console.WriteLine("Чтобы удалить файл введите >dlf [полный путь к файлу]");
-            Console.WriteLine("Чтобы скопировать папку введите >cpd [полный путь к папке] [куда скопировать, в какую папку]");
-            Console.WriteLine("Чтобы удалить папку введите >dld [полный путь к папке]");
-            Console.WriteLine("Чтобы получить информацию о файле введите >gfi [полный путь к файлу]");
-            Console.WriteLine("Чтобы получить информацию о директории введите >gdi [полный путь к директории]");
-            Console.WriteLine("Чтобы получить информацию о директории и список файлов в ней введите >showfullinf [полный путь к директории]");
+            Console.WriteLine("Чтобы скопировать файл введите >cpf<[полный путь к файлу]<[куда скопировать, с каким именем]");
+            Console.WriteLine("Чтобы удалить файл введите >dlf<[полный путь к файлу]");
+            Console.WriteLine("Чтобы скопировать папку введите >cpd<[полный путь к папке]<[куда скопировать, в какую папку, с каким именем]");
+            Console.WriteLine("Чтобы удалить папку введите >dld<[полный путь к папке]");
+            Console.WriteLine("Чтобы получить информацию о файле введите >gfi<[полный путь к файлу]");
+            Console.WriteLine("Чтобы получить информацию о директории введите >gdi<[полный путь к директории]");
+            Console.WriteLine("Чтобы получить информацию о директории и посмотреть файлы в ней, введите >showfullinf<[полный путь к директории]");
+            Console.WriteLine("Для выхода, введите >exit");
+            Console.WriteLine(@"Все пути вводятся в формате  C:\Folder1\Folder2\File.rsl. Вместо пробелов -  указатель '<'!");
+            Console.WriteLine("При работе с файлами нужно указывать их тип! txt, png  и тд");
 
 
         }
