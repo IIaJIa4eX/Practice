@@ -26,4 +26,3 @@ namespace Lesson4_Exercise2_Algs
     }
 
 }
-}
