@@ -16,13 +16,13 @@ namespace Lesson4_Exercise2_Algs
             tree.AddItem(12);
             tree.AddItem(14);
             tree.AddItem(16);
-            tree.AddItem(7);
-            tree.AddItem(8);
+
 
 
             var node = tree.GetNodeByValue(5);
-            tree.RemoveItem(13);
-            tree.GetRoot();
+            var root = tree.GetRoot();
+
+            tree.PrintTree(root);
             bool ss = true;
 
         }

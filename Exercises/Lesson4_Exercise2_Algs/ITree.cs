@@ -12,7 +12,7 @@ namespace Lesson4_Exercise2_Algs
         void AddItem(int value); // добавить узел
         void RemoveItem(int value); // удалить узел по значению
         TreeNode GetNodeByValue(int value); //получить узел дерева по значению
-        void PrintTree(); //вывести дерево в консоль
+        void PrintTree(TreeNode root, string space); //вывести дерево в консоль
 
     }
 }

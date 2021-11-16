@@ -118,9 +118,15 @@ namespace Lesson4_Exercise2_Algs
             return Root;
         }
 
-        public void PrintTree()
+        public void PrintTree(TreeNode root, string space = "")
         {
-            
+            if(root != null)
+            {
+                PrintTree(root.RightChild, space + "\t");
+                Console.WriteLine($"{space}{root.Value}");
+                PrintTree(root.LeftChild, space + "\t");
+
+            }
         }
 
         public void RemoveItem(int value)

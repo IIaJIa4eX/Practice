@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lesson4_Exercise2_Algs
 {
+    //нода дерева
     public class TreeNode
     {
         public int Value { get; set; }

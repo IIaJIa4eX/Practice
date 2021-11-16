@@ -6,28 +6,7 @@ using System.Collections.Generic;
 namespace Lesson4_Exercise1_Algs
 {
 
-    //public class ItemForHash
-    //{
-    //    public string item { get; set; }
-
-    //    public override bool Equals(object obj)
-    //    {
-    //        var itemForHash = obj as ItemForHash;
-
-    //        if (itemForHash == null)
-    //            return false;
-
-    //        return item == itemForHash.item;
-    //    }
-
-    //    public override int GetHashCode()
-    //    {
-    //        int itemHachCode = item?.GetHashCode() ?? 0;
-    //        return itemHachCode;
-    //    }
-    //}
-
-
+    //Benchmark для массива и хешсета.
     public class Program
     {
 
