@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lesson4_Exercise2_Algs
 {
+
+    //Логика построения дерева, удаление ноды, добавления ноды, отображения.
     public class TreeLogic : ITree
     {
 

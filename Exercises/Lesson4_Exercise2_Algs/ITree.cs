@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lesson4_Exercise2_Algs
 {
+    //Интерфейс для реализации
     interface ITree
     {
         TreeNode GetRoot();

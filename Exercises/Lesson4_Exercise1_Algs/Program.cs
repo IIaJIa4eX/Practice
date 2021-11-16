@@ -106,10 +106,10 @@ namespace Lesson4_Exercise1_Algs
         static void Main(string[] args)
         {
 
-            var ss = new Program();
+            //var ss = new Program();
 
-            bool kk = ss.FindInHash();
-            bool jj = ss.FindInArr();
+            //bool kk = ss.FindInHash();
+            //bool jj = ss.FindInArr();
             BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
 
         }
