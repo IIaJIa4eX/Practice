@@ -20,6 +20,21 @@ namespace Lesson2_Exercise1_OOP
 
 
 
+
+
+
+
+
+        public void MoneyTransfer(BankAccount Account, int amount)
+        {
+            if (Account.Balance - amount < 0)
+                return;
+            Account.Balance -= amount;
+            _balance += amount;
+        }
+
+
+
         public BankAccount()
         {
             _accNumber = _numbGenerator++;
