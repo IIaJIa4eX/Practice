@@ -43,7 +43,7 @@ namespace Lesson2_Exercise1_OOP
 
 
             //Lesson 3 ex2
-            string revr = "123456789";
+            string revr = "1 2 3 4 5 6 7 8 9";
             Console.WriteLine($"{StringReverse(revr)}");
 
             //-------
