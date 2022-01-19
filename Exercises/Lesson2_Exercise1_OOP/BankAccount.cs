@@ -19,12 +19,6 @@ namespace Lesson2_Exercise1_OOP
         private AccType _accT;
 
 
-
-
-
-
-
-
         public void MoneyTransfer(BankAccount Account, int amount)
         {
             if (Account.Balance - amount < 0)
@@ -34,6 +28,51 @@ namespace Lesson2_Exercise1_OOP
         }
 
 
+        //Дз номер 6
+        public static bool operator ==(BankAccount b1, BankAccount b2)
+        {
+            if(b1.Balance == b2.Balance && b1.AccountType == b2.AccountType)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        //Дз номер 6
+        public static bool operator !=(BankAccount b1, BankAccount b2)
+        {
+            if (b1.Balance != b2.Balance || b1.AccountType != b2.AccountType)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        //Дз номер 6
+        public bool Equals(BankAccount b)
+        {
+            if (this.Balance == b.Balance || this.AccountType == b.AccountType)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
+        //Дз номер 6
+        public override int GetHashCode()
+        {
+            return _accNumber;
+        }
+
+        //Дз номер 6
+        public override string ToString()
+        {
+            return $"Баланс счета равен: {this._balance}\nТип аккаунта:{this._accT}";
+        }
 
         public BankAccount()
         {
