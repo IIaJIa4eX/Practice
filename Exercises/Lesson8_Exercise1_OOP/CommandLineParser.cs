@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lesson9_Coursework
+namespace Lesson8_Exercise1_OOP
 {
-
-    /*Класс - обработчик команд. Получет строку, которую ввёл пользователь,  разбивает её на массив.
-     * В этом классе один метод - CommandHandler(), который все делает.
-     * В зависимости от того, какая команды была получена, вызывается её метод.
-     */
-    class CommandLineParser
+    sealed class CommandLineParser
     {
         private static string commands = ">help >cpd >dld >cpf >dlf >gdi >gfi >showfullinf >exit >settings";
 
+        FileCatManipulation FC;
 
-        public static bool CommandHandler(string com)
+
+        public CommandLineParser()
+        {
+            FC = new FileCatManipulation();
+        }
+
+        public bool CommandHandler(string com)
         {
             bool isworking = true;
             if (string.IsNullOrWhiteSpace(com))
@@ -40,7 +41,7 @@ namespace Lesson9_Coursework
                     case ">cpd":
                         if (splitedStr.Length == 3)
                         {
-                            FileCatManipulation.CopyFolder(splitedStr[1], splitedStr[2]);
+                            FC.CopyFolder(splitedStr[1], splitedStr[2]);
                         }
                         else
                         {
@@ -51,7 +52,7 @@ namespace Lesson9_Coursework
                     case ">dld":
                         if (splitedStr.Length == 2)
                         {
-                            FileCatManipulation.DeleteFolder(splitedStr[1]);
+                            FC.DeleteFolder(splitedStr[1]);
                         }
                         else
                         {
@@ -62,7 +63,7 @@ namespace Lesson9_Coursework
                     case ">cpf":
                         if (splitedStr.Length == 3)
                         {
-                            FileCatManipulation.CopyFile(splitedStr[1], splitedStr[2]);
+                            FC.CopyFile(splitedStr[1], splitedStr[2]);
                         }
                         else
                         {
@@ -73,18 +74,18 @@ namespace Lesson9_Coursework
                     case ">dlf":
                         if (splitedStr.Length == 2)
                         {
-                            FileCatManipulation.DeleteFile(splitedStr[1]);
+                            FC.DeleteFile(splitedStr[1]);
                         }
                         else
                         {
                             UIDraw.WriteMessage("Чтобы удалить файл введите >dlf<[полный путь к файлу]");
-                        }                        
+                        }
                         break;
 
                     case ">gdi":
                         if (splitedStr.Length == 2)
                         {
-                            UIDraw.WriteMessage(FileCatManipulation.GetDirectoryInfo(splitedStr[1]));
+                            UIDraw.WriteMessage(FC.GetDirectoryInfo(splitedStr[1]));
                         }
                         else
                         {
@@ -95,7 +96,7 @@ namespace Lesson9_Coursework
                     case ">gfi":
                         if (splitedStr.Length == 2)
                         {
-                            UIDraw.WriteMessage(FileCatManipulation.GetFileInfo(splitedStr[1]));
+                            UIDraw.WriteMessage(FC.GetFileFullInfo(splitedStr[1]));
                         }
                         else
                         {
@@ -105,9 +106,9 @@ namespace Lesson9_Coursework
 
                     case ">showfullinf":
 
-                        if(splitedStr.Length == 2)
+                        if (splitedStr.Length == 2)
                         {
-                            FileCatManipulation.ShowFullInformation(splitedStr[1]);
+                            FC.ShowFullInformation(splitedStr[1]);
                         }
                         else
                         {
@@ -119,7 +120,7 @@ namespace Lesson9_Coursework
                     case ">exit":
 
                         return false;
-                        
+
                 }
             }
             else
@@ -130,7 +131,5 @@ namespace Lesson9_Coursework
 
             return isworking;
         }
-
-
     }
 }

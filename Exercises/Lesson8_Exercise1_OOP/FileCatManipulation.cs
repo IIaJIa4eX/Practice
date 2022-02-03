@@ -5,27 +5,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lesson9_Coursework
+namespace Lesson8_Exercise1_OOP
 {
-    /*
-     * Этот класс объеденят логику классов UIDraw и ManipulationLogic.
-     * Под каждый запрос пользователя этот класс имеет отдельный метод, который передает данные для логической обработки
-     * классу ManipulationLogic, а затем, передаёт обработанные данные классу UIDraw для отрисовки.
-     * Также, в этом классе, отлавливаются ошибки.
-     */
-    public static class FileCatManipulation
+    public sealed class FileCatManipulation : ManipulationLogic
     {
-        public static void CopyFile(string sourcePath, string destinationPath)
+        LogicWrapper logicWrapper;
+
+        public FileCatManipulation()
         {
 
+           logicWrapper = new();
+        }
+
+        
+        public void CopyFile(string sourcePath, string destinationPath)
+        {
+            
+            
             if (File.Exists(sourcePath))
             {
                 try
                 {
-                    ManipulationLogic.CopyFileLogic(sourcePath, destinationPath);
+                    logicWrapper.CopyFileLogic(sourcePath, destinationPath);
                     UIDraw.WriteMessage("Копирование файла завершено успешно!");
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     UIDraw.WriteMessage("При копировании файла что-то пошло не так");
                     UIDraw.WriteMessage(e.Message);
@@ -37,18 +41,18 @@ namespace Lesson9_Coursework
             }
 
         }
-
-        public static void CopyFolder(string sourcePath, string destinationPath)
+        
+        public void CopyFolder(string sourcePath, string destinationPath)
         {
 
             if (Directory.Exists(sourcePath))
             {
                 try
                 {
-                    ManipulationLogic.CopyFolderLogic(sourcePath, destinationPath);
+                    logicWrapper.CopyFolderLogic(sourcePath, destinationPath);
                     UIDraw.WriteMessage("Копирование папки завершено успешно!");
                 }
-                catch 
+                catch
                 {
                     UIDraw.WriteMessage("При копировании папки что-то пошло не так");
                 }
@@ -60,14 +64,14 @@ namespace Lesson9_Coursework
 
         }
 
-        public static void DeleteFolder(string folderPath)
+        public void DeleteFolder(string folderPath)
         {
 
             if (Directory.Exists(folderPath))
             {
                 try
                 {
-                    ManipulationLogic.DeleteFolderLogic(folderPath);
+                    logicWrapper.DeleteFolderLogic(folderPath);
                     UIDraw.WriteMessage("Удаление папки завершено успешно!");
                 }
                 catch
@@ -85,13 +89,13 @@ namespace Lesson9_Coursework
 
 
 
-        public static void DeleteFile(string filePath)
+        public void DeleteFile(string filePath)
         {
             if (File.Exists(filePath))
             {
                 try
                 {
-                    ManipulationLogic.DeleteFileLogic(filePath);
+                    logicWrapper.DeleteFileLogic(filePath);
                     UIDraw.WriteMessage("Удаление файла заверешено успешно!");
 
                 }
@@ -106,17 +110,17 @@ namespace Lesson9_Coursework
             }
         }
 
-        public static string GetDirectoryInfo(string path)
+        public string GetDirectoryInfo(string path)
         {
-            string info = "";
+            string info;
             if (Directory.Exists(path))
             {
                 try
                 {
-                    info = ManipulationLogic.GetDirInfo(path);
+                    info = logicWrapper.GetDirInfo(path);
 
                 }
-                catch 
+                catch
                 {
                     info = "Не удалось получить информацию о папке";
                 }
@@ -129,14 +133,14 @@ namespace Lesson9_Coursework
             return info;
         }
 
-        public static string GetFileInfo(string path)
+        public string GetFileFullInfo(string path)
         {
-            string info = "";
+            string info;
             if (File.Exists(path))
             {
                 try
                 {
-                    info = ManipulationLogic.GetFileInfo(path);
+                    info = logicWrapper.GetFileInfo(path);
 
                 }
                 catch
@@ -152,7 +156,7 @@ namespace Lesson9_Coursework
             return info;
         }
 
-        public static void ShowFullInformation(string path)
+        public void ShowFullInformation(string path)
         {
 
             UserSettings.UserConsole();
@@ -179,7 +183,7 @@ namespace Lesson9_Coursework
                     decimal totalpages = Math.Ceiling(Convert.ToDecimal(ents.Length) / Convert.ToDecimal(pageItems));
                     int total = Convert.ToInt32(totalpages);
 
-                    var c = ManipulationLogic.GetFileCatPageRight(ents, true, nextUpperIndex, currentPage, total, pageItems);
+                    var c = LogicWrapper.GetFileCatPageRight(ents, true, nextUpperIndex, currentPage, total, pageItems);
                     nextUpperIndex = c.nextStartIndex;
 
                     UIDraw.DrawCatFilesPage(currentPage, total, c.filesArr, path);
@@ -188,7 +192,7 @@ namespace Lesson9_Coursework
                         var a = Console.ReadKey();
                         if (a.Key.ToString() == "RightArrow")
                         {
-                            var b = ManipulationLogic.GetFileCatPageRight(ents, false, nextUpperIndex, currentPage, total, pageItems);
+                            var b = LogicWrapper.GetFileCatPageRight(ents, false, nextUpperIndex, currentPage, total, pageItems);
                             nextUpperIndex = b.nextStartIndex;
                             nextLowerIndex = b.prevIndex;
                             currentPage = b.currentPage;
@@ -199,7 +203,7 @@ namespace Lesson9_Coursework
                         if (a.Key.ToString() == "LeftArrow")
                         {
                             //
-                            var b = ManipulationLogic.GetFileCatPageLeft(ents, false, nextLowerIndex, currentPage, total, pageItems);
+                            var b = LogicWrapper.GetFileCatPageLeft(ents, false, nextLowerIndex, currentPage, total, pageItems);
                             nextUpperIndex = b.nextUpperIndex;
                             nextLowerIndex = b.nextLowerIndex;
                             currentPage = b.currentPage;

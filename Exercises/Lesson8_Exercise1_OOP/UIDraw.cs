@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lesson9_Coursework
+namespace Lesson8_Exercise1_OOP
 {
-    /*
-     * Класс для для отображения данных на консоле
-     */
-    public static class UIDraw
+    public sealed class UIDraw
     {
-
         public static void ClearConsole()
         {
 
