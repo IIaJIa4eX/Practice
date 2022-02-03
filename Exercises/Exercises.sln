@@ -125,7 +125,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lesson7_Exercise1_OOP", "Le
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lesson8", "Lesson8", "{AB0850D0-E44E-4E6C-BAD1-F6F603036895}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson8_Exercise1_OOP", "Lesson8_Exercise1_OOP\Lesson8_Exercise1_OOP.csproj", "{B14B17AD-1472-475F-ADEE-50CCDA4C62FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lesson8_Exercise1_OOP", "Lesson8_Exercise1_OOP\Lesson8_Exercise1_OOP.csproj", "{B14B17AD-1472-475F-ADEE-50CCDA4C62FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
