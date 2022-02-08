@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        //Задание 3
+        let a = prompt("введите первое число");
+        let b = prompt("введите второе число");
+
+        if (a > 0 && b > 0) {
+            alert("Разность чисел равна: " + (a - b));
+        }
+
+        if (a < 0 && b < 0) {
+            alert("Произведение чисел равно: " + (a * b));
+        }
+
+        //Задание 4
+        function Sum(a, b) {
+            return a + b;
+        }
+
+        function Substruct(a, b) {
+            return a - b;
+        }
+
+        function Multiplication(a, b) {
+            return a * b;
+        }
+
+        function Devision(a, b) {
+            return a / b;
+        }
+
+        // Задание 5
+
+        function mathOperation(arg1, arg2, operation) {
+
+            switch (operation) {
+                case "+":
+                    return Sum(arg1, arg2);
+                case "-":
+                    return Substruct(arg1, arg2);
+                case "/":
+                    return Devision(arg1, arg2);
+                case "*":
+                    return Multiplication(arg1, arg2);
+                default:
+                    alert("Неизвестное действие")
+                    break;
+            }
+        }
+
+        let a1 = mathOperation(2, 5, "+");
+        let a2 = mathOperation(2, 5, "-");
+        let a3 = mathOperation(2, 5, "*");
+        let a4 = mathOperation(2, 5, "/");
+
+    </script>
+</body>
+
+</html>
