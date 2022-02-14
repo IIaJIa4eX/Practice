@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        'use strict'
+        //Задание 3
+        const products = [
+            {
+                id: 3,
+                price: 200,
+            },
+            {
+                id: 4,
+                price: 900,
+            },
+            {
+                id: 1,
+                price: 1000,
+            },
+        ];
+        products.forEach(function callback(product) {
+            product.price -= (product.price * 0.15);
+        });
+
+        //Задание 4
+        const products2 = [
+            {
+                id: 3,
+                price: 127,
+                photos: [
+                    "1.jpg",
+                    "2.jpg",
+                ]
+            },
+            {
+                id: 5,
+                price: 499,
+                photos: []
+            },
+            {
+                id: 10,
+                price: 26,
+                photos: [
+                    "3.jpg"
+                ]
+            },
+            {
+                id: 8,
+                price: 78,
+            },
+        ];
+
+        let photosFilter = products2.filter(function callback(product) {
+            if ('photos' in product && product.photos.length > 0) {
+                return true;
+            }
+            return false;
+        });
+        products2.sort(function callback(productA, productB) {
+
+            if (productA.price < productB.price) {
+                return -1;
+            }
+            if (productA.price > productB.price) {
+                return 1;
+            }
+            return 0;
+        });
+        console.log(photosFilter);
+    </script>
+</body>
+
+</html>
