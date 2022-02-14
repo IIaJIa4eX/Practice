@@ -15,7 +15,16 @@
         //Задание 1
         'use strict'
         for (let index = 0; index < 11; index++) {
-            console.log(index);
+            if (index == 0) {
+                console.log(index + ' - это ноль');
+                continue;
+            }
+            if (index % 2 == 0) {
+                console.log(index + ' - это четное число');
+            }
+            if (index % 2 != 0) {
+                console.log(index + ' - это нечетное число');
+            }
         }
 
         //Задание 2
