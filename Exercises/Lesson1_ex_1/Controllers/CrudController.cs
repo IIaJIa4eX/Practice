@@ -10,6 +10,7 @@ namespace Lesson1_ex_1_API_micro.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    //toreview
     public class CrudController : ControllerBase
     {
         private readonly ValuesHolder _holder;
@@ -32,10 +33,16 @@ namespace Lesson1_ex_1_API_micro.Controllers
             return Ok(_holder.Get());
         }
 
-        [HttpGet("range")]
-        public IActionResult GetRange([FromQuery] string fromDate, string toDate)
+        [HttpGet("rangebymin")]
+        public IActionResult GetRangeByMinutes([FromQuery] string fromDate, string toDate)
         {
-            return Ok(_holder.GetRange(fromDate,toDate));
+            return Ok(_holder.GetRangeByMinutes(fromDate,toDate));
+        }
+
+        [HttpGet("rangebydays")]
+        public IActionResult GetRangeByDays([FromQuery] string fromDate, string toDate)
+        {
+            return Ok(_holder.GetRangeByDays(fromDate, toDate));
         }
 
         [HttpPut("update")]
