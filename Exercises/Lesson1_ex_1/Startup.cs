@@ -1,3 +1,4 @@
+using Lesson1_ex_1_API_micro.Logic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
