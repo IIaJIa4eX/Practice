@@ -20,7 +20,7 @@ namespace MetricsProject_ver1.Controllers
 
         [HttpPut("enable/{agentId}")]
         public IActionResult EnableAgentById([FromRoute] int agentId)
-{
+        {
             return Ok();
         }
 
