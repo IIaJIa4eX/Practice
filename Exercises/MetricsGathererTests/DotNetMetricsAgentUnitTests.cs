@@ -11,10 +11,10 @@ namespace MetricsAgentTests
 {
     public class DotNetMetricsAgentUnitTests
     {
-        private DotNetMetricsAgent controller;
+        private DotNetMetricsAgentController controller;
         public DotNetMetricsAgentUnitTests()
         {
-            controller = new DotNetMetricsAgent();
+            controller = new DotNetMetricsAgentController();
         }
         [Fact]
         public void GetMetrics_ReturnsOk()

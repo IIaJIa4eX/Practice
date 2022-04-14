@@ -11,10 +11,10 @@ namespace MetricsAgentTests
 {
     public class HddMetricsAgentUnitTests
     {
-        private HddMetricsAgent controller;
+        private HddMetricsAgentController controller;
         public HddMetricsAgentUnitTests()
         {
-            controller = new HddMetricsAgent();
+            controller = new HddMetricsAgentController();
         }
         [Fact]
         public void GetMetrics_ReturnsOk()

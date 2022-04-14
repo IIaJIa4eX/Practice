@@ -9,7 +9,7 @@ namespace MetricsAgent.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DotNetMetricsAgent : ControllerBase
+    public class DotNetMetricsAgentController : ControllerBase
     {
 
         [HttpGet("api/metrics/dotnet/errors-count/from/{fromTime}/to/{toTime}")]

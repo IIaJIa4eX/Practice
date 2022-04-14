@@ -9,13 +9,12 @@ namespace MetricsAgent.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CpuMetricsAgent : ControllerBase
+    public class NetWorkMetricsAgentController : ControllerBase
     {
-
-        [HttpGet("api/metrics/cpu/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetCpuMetrics(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+        [HttpGet("api/metrics/network/from/{fromTime}/to/{toTime}")]
+        public IActionResult GetNetWorkMetrics(
+        [FromRoute] TimeSpan fromTime,
+        [FromRoute] TimeSpan toTime)
         {
             return Ok();
         }

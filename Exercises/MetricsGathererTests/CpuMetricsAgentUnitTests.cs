@@ -1,5 +1,8 @@
 ﻿using MetricsAgent.Controllers;
+using MetricsAgent.DAL;
+using MetricsAgent.Models;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +14,13 @@ namespace MetricsAgentTests
 {
     public class CpuMetricsAgentUnitTests
     {
-        private CpuMetricsAgent controller;
+        private CpuMetricsAgentController controller;
+
+        private Mock<ICpuMetricsRepository> mock;
         public CpuMetricsAgentUnitTests()
         {
-            controller = new CpuMetricsAgent();
+            mock = new Mock<ICpuMetricsRepository>();
+            controller = new CpuMetricsAgentController(mock.Object);
         }
         [Fact]
         public void GetMetrics_ReturnsOk()
@@ -28,5 +34,24 @@ namespace MetricsAgentTests
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
+
+        [Fact]
+        public void Create_ShouldCall_Create_From_Repository()
+        {
+
+            mock.Setup(repository =>repository.Create(It.IsAny<CpuMetric>())).Verifiable();
+            var result = controller.Create(new
+            MetricsAgent.Requests.CpuMetricCreateRequest
+            {
+                Time = TimeSpan.FromSeconds(1),
+                Value = 50
+            });
+            mock.Verify(repository => repository.Create(It.IsAny<CpuMetric>()),Times.AtMostOnce());
+        }
+
+
+
+
+
     }
 }

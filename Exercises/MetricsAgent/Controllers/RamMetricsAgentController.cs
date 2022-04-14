@@ -9,11 +9,10 @@ namespace MetricsAgent.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HddMetricsAgent : ControllerBase
+    public class RamMetricsAgentController : ControllerBase
     {
-
-        [HttpGet("api/metrics/hdd/left/from/{fromTime}/to/{toTime}.")]
-        public IActionResult GetHddMetrics(
+        [HttpGet("api/metrics/ram/available/from/{fromTime}/to/{toTime}")]
+        public IActionResult GetAvailableRamMetrics(
         [FromRoute] TimeSpan fromTime,
         [FromRoute] TimeSpan toTime)
         {

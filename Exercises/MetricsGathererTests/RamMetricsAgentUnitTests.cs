@@ -11,10 +11,10 @@ namespace MetricsAgentTests
 {
     public class RamMetricsAgentUnitTests
     {
-        private RamMetricsAgent controller;
+        private RamMetricsAgentController controller;
         public RamMetricsAgentUnitTests()
         {
-            controller = new RamMetricsAgent();
+            controller = new RamMetricsAgentController();
         }
         [Fact]
         public void GetMetrics_ReturnsOk()

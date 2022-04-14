@@ -11,10 +11,10 @@ namespace MetricsAgentTests
 {
     public class NetWorkMetricsAgentUnitTests
     {
-        private NetWorkMetricsAgent controller;
+        private NetWorkMetricsAgentController controller;
         public NetWorkMetricsAgentUnitTests()
         {
-            controller = new NetWorkMetricsAgent();
+            controller = new NetWorkMetricsAgentController();
         }
         [Fact]
         public void GetMetrics_ReturnsOk()
