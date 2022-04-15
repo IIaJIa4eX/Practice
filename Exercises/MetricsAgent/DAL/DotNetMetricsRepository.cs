@@ -38,7 +38,7 @@ namespace MetricsAgent.DAL
                     connection.Open();
                     using var cmd = new SQLiteCommand(connection);
 
-                    cmd.CommandText = "SELECT * FROM dotnetmetrics";
+                    cmd.CommandText = "SELECT * FROM dotnetmetrics WHERE "; //TODO
                     var returnList = new List<CpuMetric>();
 
                     using (SQLiteDataReader reader = cmd.ExecuteReader())
