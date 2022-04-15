@@ -4,6 +4,7 @@ using MetricsAgent.Requests;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,18 @@ namespace MetricsAgent.Controllers
     {
 
         private ICpuMetricsRepository repository;
-        public CpuMetricsAgentController(ICpuMetricsRepository repository)
+        private readonly ILogger<CpuMetricsAgentController> _logger;
+
+        public CpuMetricsAgentController(ICpuMetricsRepository repository, ILogger<CpuMetricsAgentController> logger)
         {
             this.repository = repository;
+            _logger = logger;
         }
 
         [HttpPost("create")]
         public IActionResult Create([FromBody] CpuMetricCreateRequest request)
         {
+            _logger.LogInformation($"Данные метода Create в CpuMetricsAgentController: {request.Time}, {request.Value}");
             repository.Create(new CpuMetric
             {
                 Time = request.Time,
@@ -36,6 +41,7 @@ namespace MetricsAgent.Controllers
         [HttpGet("all")]
         public IActionResult GetAll()
         {
+
             var metrics = repository.GetAll();
             var response = new AllCpuMetricsResponse()
             {
@@ -50,6 +56,7 @@ namespace MetricsAgent.Controllers
                     Id = metric.Id
                 });
             }
+            _logger.LogInformation($"Отработал метод GetAll");
             return Ok(response);
         }
 
@@ -60,6 +67,7 @@ namespace MetricsAgent.Controllers
             [FromRoute] TimeSpan fromTime,
             [FromRoute] TimeSpan toTime)
         {
+            _logger.LogInformation($"Данные метода GetCpuMetrics в CpuMetricsAgentController: {fromTime}, {toTime}");
             return Ok();
         }
     }

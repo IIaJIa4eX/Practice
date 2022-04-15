@@ -29,6 +29,9 @@ namespace MetricsProject_ver1.Controllers
             [FromRoute] TimeSpan fromTime,
             [FromRoute] TimeSpan toTime)
         {
+
+            _logger.LogInformation($"Данные метода GetMetricsFromAgent в CpuMetricsController: {agentId}, {fromTime}, {toTime}");
+
             return Ok();
         }
 
@@ -37,6 +40,8 @@ namespace MetricsProject_ver1.Controllers
             [FromRoute] TimeSpan fromTime,
             [FromRoute] TimeSpan toTime)
         {
+
+            _logger.LogInformation($"Данные метода GetMetricsFromAllCluster в CpuMetricsController: {fromTime}, {toTime}");
             return Ok();
         }
 
