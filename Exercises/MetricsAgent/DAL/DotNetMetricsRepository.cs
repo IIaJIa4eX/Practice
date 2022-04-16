@@ -32,20 +32,23 @@ namespace MetricsAgent.DAL
 
             }
 
-                public IList<CpuMetric> GetByTimePeriod()
+                public IList<DotNetMetric> GetByTimePeriod(TimeSpan fromTime,TimeSpan toTime)
                 {
                     using var connection = new SQLiteConnection(ConnectionString);
                     connection.Open();
                     using var cmd = new SQLiteCommand(connection);
 
-                    cmd.CommandText = "SELECT * FROM dotnetmetrics WHERE "; //TODO
-                    var returnList = new List<CpuMetric>();
+                    cmd.CommandText = "SELECT * FROM dotnetmetrics WHERE time >= @fromTime AND time <= @toTime";
+                    cmd.Parameters.AddWithValue("@fromTime", fromTime.TotalSeconds);
+                    cmd.Parameters.AddWithValue("@toTime", toTime.TotalSeconds);
+                    cmd.Prepare();
+                    var returnList = new List<DotNetMetric>();
 
                     using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            returnList.Add(new CpuMetric
+                            returnList.Add(new DotNetMetric
                             {
                                 Id = reader.GetInt32(0),
                                 Value = reader.GetInt32(1),

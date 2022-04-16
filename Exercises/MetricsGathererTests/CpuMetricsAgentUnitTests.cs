@@ -2,6 +2,7 @@
 using MetricsAgent.DAL;
 using MetricsAgent.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,18 @@ namespace MetricsAgentTests
     public class CpuMetricsAgentUnitTests
     {
         private CpuMetricsAgentController controller;
-
         private Mock<ICpuMetricsRepository> mock;
+        private Mock<ILogger<CpuMetricsAgentController>> mockLog;
         public CpuMetricsAgentUnitTests()
         {
+            mockLog = new Mock<ILogger<CpuMetricsAgentController>>();
+            ILogger<CpuMetricsAgentController> logger = mockLog.Object;
             mock = new Mock<ICpuMetricsRepository>();
-            controller = new CpuMetricsAgentController(mock.Object);
+
+            controller = new CpuMetricsAgentController(mock.Object, logger);
         }
+
+
         [Fact]
         public void GetMetrics_ReturnsOk()
         {
@@ -47,6 +53,25 @@ namespace MetricsAgentTests
                 Value = 50
             });
             mock.Verify(repository => repository.Create(It.IsAny<CpuMetric>()),Times.AtMostOnce());
+        }
+
+        [Fact]
+        public void GetByTimePeriod_ShouldCall_GetByTimePeriod_From_Repository()
+        {
+            TimeSpan ts1 = new TimeSpan(12, 00, 00);
+            TimeSpan ts2 = new TimeSpan(12, 10, 00);
+
+            mock.Setup(repository => repository.GetByTimePeriod(
+                It.IsAny<TimeSpan>(),
+                It.IsAny<TimeSpan>()))
+                .Verifiable();
+
+            var result = controller.GetByTimePeriod(ts1,ts2);
+
+            mock.Verify(repository => repository.GetByTimePeriod(
+                It.IsAny<TimeSpan>(),
+                It.IsAny<TimeSpan>()),
+                Times.AtMostOnce());
         }
 
 

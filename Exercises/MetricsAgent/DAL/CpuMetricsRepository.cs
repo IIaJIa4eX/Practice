@@ -89,7 +89,11 @@ namespace MetricsAgent.DAL
             using var connection = new SQLiteConnection(ConnectionString);
             connection.Open();
             using var cmd = new SQLiteCommand(connection);
+
             cmd.CommandText = "SELECT * FROM cpumetrics WHERE id=@id";
+
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
                 // Если удалось что-то прочитать
@@ -110,6 +114,33 @@ namespace MetricsAgent.DAL
             }
         }
 
+ 
+        public IList<CpuMetric> GetByTimePeriod(TimeSpan fromTime, TimeSpan toTime)
+        {
+            using var connection = new SQLiteConnection(ConnectionString);
+            connection.Open();
+            using var cmd = new SQLiteCommand(connection);
 
+            cmd.CommandText = "SELECT * FROM cpumetrics WHERE time >= @fromTime AND time <= @toTime";
+
+            cmd.Parameters.AddWithValue("@fromTime", fromTime.TotalSeconds);
+            cmd.Parameters.AddWithValue("@toTime", toTime.TotalSeconds);
+            cmd.Prepare();
+            var returnList = new List<CpuMetric>();
+
+            using (SQLiteDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    returnList.Add(new CpuMetric
+                    {
+                        Id = reader.GetInt32(0),
+                        Value = reader.GetInt32(1),
+                        Time = TimeSpan.FromSeconds(reader.GetInt32(2))
+                    });
+                }
+            }
+            return returnList;
+        }
     }
 }

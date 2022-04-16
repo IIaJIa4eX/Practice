@@ -1,5 +1,7 @@
 ﻿using MetricsProject_ver1.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,15 @@ namespace MetricsManagerTests
     public class HddMetricsControllerUnitTests
     {
         private HddMetricsController controller;
+        private Mock<HddMetricsController> mock;
+        private Mock<ILogger<HddMetricsController>> mockLog;
         public HddMetricsControllerUnitTests()
         {
-            controller = new HddMetricsController();
+            mockLog = new Mock<ILogger<HddMetricsController>>();
+            ILogger<HddMetricsController> logger = mockLog.Object;
+            mock = new Mock<HddMetricsController>();
+
+            controller = new HddMetricsController(logger);
         }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()

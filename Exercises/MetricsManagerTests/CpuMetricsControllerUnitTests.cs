@@ -1,5 +1,7 @@
 ﻿using MetricsProject_ver1.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +15,17 @@ namespace MetricsManagerTests
     {
 
             private CpuMetricsController controller;
+            private Mock<ILogger<CpuMetricsController>> mockLog;
             public CpuMetricsControllerUnitTests()
             {
-                controller = new CpuMetricsController();
+            mockLog = new Mock<ILogger<CpuMetricsController>>();
+            ILogger<CpuMetricsController> logger = mockLog.Object;
+
+
+            controller = new CpuMetricsController(logger);
             }
+
+
             [Fact]
             public void GetMetricsFromAgent_ReturnsOk()
             {
@@ -44,6 +53,7 @@ namespace MetricsManagerTests
                 _ = Assert.IsAssignableFrom<IActionResult>(result);
             }
 
-        
+            
+
     }
 }

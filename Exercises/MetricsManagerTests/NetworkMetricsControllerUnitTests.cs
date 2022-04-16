@@ -1,5 +1,7 @@
 ﻿using MetricsProject_ver1.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,15 @@ namespace MetricsManagerTests
     public class NetworkMetricsControllerUnitTests
     {
         private NetworkMetricsController controller;
+        private Mock<NetworkMetricsController> mock;
+        private Mock<ILogger<NetworkMetricsController>> mockLog;
         public NetworkMetricsControllerUnitTests()
         {
-            controller = new NetworkMetricsController();
+            mockLog = new Mock<ILogger<NetworkMetricsController>>();
+            ILogger<NetworkMetricsController> logger = mockLog.Object;
+            mock = new Mock<NetworkMetricsController>();
+
+            controller = new NetworkMetricsController(logger);
         }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()

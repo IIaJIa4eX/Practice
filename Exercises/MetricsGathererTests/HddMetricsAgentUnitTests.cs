@@ -1,5 +1,9 @@
 ﻿using MetricsAgent.Controllers;
+using MetricsAgent.DAL;
+using MetricsAgent.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +16,18 @@ namespace MetricsAgentTests
     public class HddMetricsAgentUnitTests
     {
         private HddMetricsAgentController controller;
+        private Mock<IHddMetricsRepository> _mock;
+        private Mock<ILogger<HddMetricsAgentController>> _mockLog;
         public HddMetricsAgentUnitTests()
         {
-            controller = new HddMetricsAgentController();
+            _mockLog = new Mock<ILogger<HddMetricsAgentController>>();
+            ILogger<HddMetricsAgentController> logger = _mockLog.Object;
+
+            _mock = new Mock<IHddMetricsRepository>();
+            controller = new HddMetricsAgentController(logger, _mock.Object);
         }
+
+
         [Fact]
         public void GetMetrics_ReturnsOk()
         {
@@ -27,6 +39,39 @@ namespace MetricsAgentTests
             toTime);
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
+
+        [Fact]
+        public void Create_ShouldCall_Create_From_Repository()
+        {
+
+            _mock.Setup(repository => repository.Create(It.IsAny<HddMetric>())).Verifiable();
+            var result = controller.Create(new
+            MetricsAgent.Requests.HddMetricCreateRequest
+            {
+                Time = TimeSpan.FromSeconds(1),
+                Value = 50
+            });
+            _mock.Verify(repository => repository.Create(It.IsAny<HddMetric>()), Times.AtMostOnce());
+        }
+
+        [Fact]
+        public void GetByTimePeriod_ShouldCall_GetByTimePeriod_From_Repository()
+        {
+            TimeSpan ts1 = new TimeSpan(12, 00, 00);
+            TimeSpan ts2 = new TimeSpan(12, 10, 00);
+
+            _mock.Setup(repository => repository.GetByTimePeriod(
+                It.IsAny<TimeSpan>(),
+                It.IsAny<TimeSpan>()))
+                .Verifiable();
+
+            var result = controller.GetByTimePeriod(ts1, ts2);
+
+            _mock.Verify(repository => repository.GetByTimePeriod(
+                It.IsAny<TimeSpan>(),
+                It.IsAny<TimeSpan>()),
+                Times.AtMostOnce());
         }
     }
 }

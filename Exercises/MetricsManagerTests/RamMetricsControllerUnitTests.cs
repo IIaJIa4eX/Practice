@@ -1,5 +1,7 @@
 ﻿using MetricsProject_ver1.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,15 @@ namespace MetricsManagerTests
     public class RamMetricsControllerUnitTests
     {
         private RamMetricsController controller;
+        private Mock<RamMetricsController> mock;
+        private Mock<ILogger<RamMetricsController>> mockLog;
         public RamMetricsControllerUnitTests()
         {
-            controller = new RamMetricsController();
+            mockLog = new Mock<ILogger<RamMetricsController>>();
+            ILogger<RamMetricsController> logger = mockLog.Object;
+            mock = new Mock<RamMetricsController>();
+
+            controller = new RamMetricsController(logger);
         }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()
