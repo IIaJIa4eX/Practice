@@ -1,4 +1,8 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using Core;
+using Dapper;
+using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using MetricsAgent.Requests;
 using MetricsAgent.Responses;
@@ -19,12 +23,15 @@ namespace MetricsAgent.Controllers
 
         private ICpuMetricsRepository _repository;
         private readonly ILogger<CpuMetricsAgentController> _logger;
+        private readonly INotifierMediatorService _notifierMediatorService;
+        private readonly IMapper _mapper;
 
-
-        public CpuMetricsAgentController(ICpuMetricsRepository repository, ILogger<CpuMetricsAgentController> logger)
+        public CpuMetricsAgentController(ICpuMetricsRepository repository, ILogger<CpuMetricsAgentController> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
+            
         }
 
         [HttpPost("create")]
@@ -43,20 +50,16 @@ namespace MetricsAgent.Controllers
         public IActionResult GetAll()
         {
 
-            var metrics = _repository.GetAll();
+            IList<CpuMetric> metrics = _repository.GetAll();
             var response = new AllCpuMetricsResponse()
             {
                 Metrics = new List<CpuMetricDto>()
             };
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new CpuMetricDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
             }
+
             _logger.LogInformation($"Отработал метод GetAll");
             return Ok(response);
         }
@@ -88,13 +91,7 @@ namespace MetricsAgent.Controllers
                 };
                 foreach (var metric in metrics)
                 {
-                    response.Metrics.Add(new CpuMetricDto
-                    {
-                        Time = metric.Time,
-                        Value = metric.Value,
-                        Id = metric.Id
-                    });
-
+                    response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
                 }
 
                 return Ok(response);

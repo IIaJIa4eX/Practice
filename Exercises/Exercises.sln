@@ -135,13 +135,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lesson1_ex_1_API_micro", "L
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetricsProject", "MetricsProject", "{25FD424E-6A9D-432B-97F2-A6036D3AE654}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsProject_ver1", "MetricsProject_ver1\MetricsProject_ver1.csproj", "{CC0DCD17-33DB-4D04-96B4-2A641176AB67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsProject_ver1", "MetricsProject_ver1\MetricsProject_ver1.csproj", "{CC0DCD17-33DB-4D04-96B4-2A641176AB67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsManagerTests", "MetricsManagerTests\MetricsManagerTests.csproj", "{F9C670F7-6B9E-4E47-A384-0891D9D5D989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManagerTests", "MetricsManagerTests\MetricsManagerTests.csproj", "{F9C670F7-6B9E-4E47-A384-0891D9D5D989}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsAgent", "MetricsAgent\MetricsAgent.csproj", "{AA499A98-726B-40DC-B8BD-150DC1E510BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgent", "MetricsAgent\MetricsAgent.csproj", "{AA499A98-726B-40DC-B8BD-150DC1E510BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsAgentTests", "MetricsGathererTests\MetricsAgentTests.csproj", "{4769C00E-ECB3-4816-ADC6-EE7BDAC1F9AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgentTests", "MetricsGathererTests\MetricsAgentTests.csproj", "{4769C00E-ECB3-4816-ADC6-EE7BDAC1F9AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{CB33E5A2-68B2-4123-9FC5-FC63106C930A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -321,6 +323,10 @@ Global
 		{4769C00E-ECB3-4816-ADC6-EE7BDAC1F9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4769C00E-ECB3-4816-ADC6-EE7BDAC1F9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4769C00E-ECB3-4816-ADC6-EE7BDAC1F9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB33E5A2-68B2-4123-9FC5-FC63106C930A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB33E5A2-68B2-4123-9FC5-FC63106C930A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB33E5A2-68B2-4123-9FC5-FC63106C930A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB33E5A2-68B2-4123-9FC5-FC63106C930A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -392,6 +398,7 @@ Global
 		{F9C670F7-6B9E-4E47-A384-0891D9D5D989} = {25FD424E-6A9D-432B-97F2-A6036D3AE654}
 		{AA499A98-726B-40DC-B8BD-150DC1E510BB} = {25FD424E-6A9D-432B-97F2-A6036D3AE654}
 		{4769C00E-ECB3-4816-ADC6-EE7BDAC1F9AE} = {25FD424E-6A9D-432B-97F2-A6036D3AE654}
+		{CB33E5A2-68B2-4123-9FC5-FC63106C930A} = {25FD424E-6A9D-432B-97F2-A6036D3AE654}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {502C10B1-809B-4306-BCAD-CD13B727A2B5}

@@ -1,5 +1,7 @@
-﻿using MetricsAgent.Controllers;
+﻿using AutoMapper;
+using MetricsAgent.Controllers;
 using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,13 +20,15 @@ namespace MetricsAgentTests
         private RamMetricsAgentController controller;
         private Mock<IRamMetricsRepository> _mock;
         private Mock<ILogger<RamMetricsAgentController>> _mockLog;
+        private Mock<IMapper> mockMap;
         public RamMetricsAgentUnitTests()
         {
             _mockLog = new Mock<ILogger<RamMetricsAgentController>>();
             ILogger<RamMetricsAgentController> logger = _mockLog.Object;
-
             _mock = new Mock<IRamMetricsRepository>();
-            controller = new RamMetricsAgentController(_mock.Object, logger);
+            mockMap = new Mock<IMapper>();
+
+            controller = new RamMetricsAgentController(_mock.Object, logger, mockMap.Object);
         }
         [Fact]
         public void GetMetrics_ReturnsOk()

@@ -1,5 +1,7 @@
-﻿using MetricsAgent.Controllers;
+﻿using AutoMapper;
+using MetricsAgent.Controllers;
 using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,13 +20,15 @@ namespace MetricsAgentTests
         private CpuMetricsAgentController controller;
         private Mock<ICpuMetricsRepository> mock;
         private Mock<ILogger<CpuMetricsAgentController>> mockLog;
+        private Mock<IMapper> mockMap;
+
         public CpuMetricsAgentUnitTests()
         {
             mockLog = new Mock<ILogger<CpuMetricsAgentController>>();
             ILogger<CpuMetricsAgentController> logger = mockLog.Object;
             mock = new Mock<ICpuMetricsRepository>();
-
-            controller = new CpuMetricsAgentController(mock.Object, logger);
+            mockMap = new Mock<IMapper>();
+            controller = new CpuMetricsAgentController(mock.Object, logger, mockMap.Object);
         }
 
 

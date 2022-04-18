@@ -1,4 +1,6 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using MetricsAgent.Requests;
 using MetricsAgent.Responses;
@@ -18,11 +20,13 @@ namespace MetricsAgent.Controllers
     {
         private IDotNetMetricsRepository _repository;
         private readonly ILogger<DotNetMetricsAgentController> _logger;
-
-        public DotNetMetricsAgentController(IDotNetMetricsRepository repository, ILogger<DotNetMetricsAgentController> logger)
+        private readonly IMapper _mapper;
+        public DotNetMetricsAgentController(IDotNetMetricsRepository repository, ILogger<DotNetMetricsAgentController> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
+
         }
 
 
@@ -47,6 +51,25 @@ namespace MetricsAgent.Controllers
             return Ok();
         }
 
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+
+            IList<DotNetMetric> metrics = _repository.GetAll();
+            var response = new AllDotNetMetricsResponse()
+            {
+                Metrics = new List<DotNetMetricDto>()
+            };
+            foreach (var metric in metrics)
+            {
+                response.Metrics.Add(_mapper.Map<DotNetMetricDto>(metric));
+            }
+
+            _logger.LogInformation($"Отработал метод GetAll");
+            return Ok(response);
+        }
+
+
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
         public IActionResult GetByTimePeriod(
             [FromRoute] TimeSpan fromTime,
@@ -63,12 +86,7 @@ namespace MetricsAgent.Controllers
                 };
                 foreach (var metric in metrics)
                 {
-                    response.Metrics.Add(new DotNetMetricDto
-                    {
-                        Time = metric.Time,
-                        Value = metric.Value,
-                        Id = metric.Id
-                    });
+                    response.Metrics.Add(_mapper.Map<DotNetMetricDto>(metric));
                 }
                 return Ok(response);
             }

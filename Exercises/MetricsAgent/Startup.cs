@@ -1,4 +1,9 @@
+using AutoMapper;
+using Core;
+using Dapper;
 using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
+using MetricsAgent.Mapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +26,7 @@ namespace MetricsAgent
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+           // SqlMapper.AddTypeHandler(new TimeSpanHandler());
         }
 
         public IConfiguration Configuration { get; }
@@ -36,8 +42,14 @@ namespace MetricsAgent
             services.AddScoped<IHddMetricsRepository, HddMetricsRepository>();
             services.AddScoped<INetWorkMetricsRepository, NetWorkMetricsRepository>();
             services.AddScoped<IRamMetricsRepository, RamMetricsRepository>();
-            
+            services.AddTransient<INotifierMediatorService, NotifierMediatorService>();
+
             services.AddMvc().AddNewtonsoftJson();
+
+
+            var mapperConfiguration = new MapperConfiguration(mp => mp.AddProfile(new MapperProfile()));
+            var mapper = mapperConfiguration.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         private void ConfigureSqlLiteConnection(IServiceCollection services)
@@ -51,31 +63,34 @@ namespace MetricsAgent
 
         private void PrepareData(SQLiteConnection connection)
         {
-            TimeSpan ts1 = new TimeSpan(12, 00, 00);
-            TimeSpan ts2 = new TimeSpan(12, 10, 00);
-            TimeSpan ts3 = new TimeSpan(12, 20, 00);
+            TimeSpan ts1 = new TimeSpan(12, 00, 12);
+            TimeSpan ts2 = new TimeSpan(12, 10, 12);
+            TimeSpan ts3 = new TimeSpan(1, 12, 20, 12);
             
             using (var cmd = new SQLiteCommand(connection))
             {
                 foreach (string item in dbs)
                 {
-                    cmd.CommandText = $"INSERT INTO {item}(value, time)VALUES(@value, @time)";
-                    cmd.Parameters.AddWithValue("@value", 600);
-                    cmd.Parameters.AddWithValue("@time", ts1.TotalSeconds);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
+                    connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
+                        new
+                    {
+                        value = 600,
+                        time = ts1.TotalSeconds
+                    });
 
-                    cmd.CommandText = $"INSERT INTO {item}(value, time)VALUES(@value, @time)";
-                    cmd.Parameters.AddWithValue("@value", 700);
-                    cmd.Parameters.AddWithValue("@time", ts2.TotalSeconds);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
+                    connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
+                    new
+                    {
+                        value = 700,
+                        time = ts2.TotalSeconds
+                    });
 
-                    cmd.CommandText = $"INSERT INTO {item}(value, time)VALUES(@value, @time)";
-                    cmd.Parameters.AddWithValue("@value", 800);
-                    cmd.Parameters.AddWithValue("@time", ts3.TotalSeconds);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
+                    connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
+                    new
+                    {
+                        value = 800,
+                        time = ts3.TotalSeconds
+                    });
                 }
             }
         }

@@ -1,4 +1,6 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using MetricsAgent.Requests;
 using MetricsAgent.Responses;
@@ -18,11 +20,14 @@ namespace MetricsAgent.Controllers
     {
         private INetWorkMetricsRepository _repository;
         private readonly ILogger<NetWorkMetricsAgentController> _logger;
+        private readonly IMapper _mapper;
 
-        public NetWorkMetricsAgentController(INetWorkMetricsRepository repository, ILogger<NetWorkMetricsAgentController> logger)
+        public NetWorkMetricsAgentController(INetWorkMetricsRepository repository, ILogger<NetWorkMetricsAgentController> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
+
         }
 
         [HttpGet("api/metrics/network/from/{fromTime}/to/{toTime}")]
@@ -46,6 +51,29 @@ namespace MetricsAgent.Controllers
             return Ok();
         }
 
+
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+
+            IList<NetWorkMetric> metrics = _repository.GetAll();
+            var response = new AllNetWorkMetricsResponse()
+            {
+                Metrics = new List<NetWorkMetricDto>()
+            };
+            foreach (var metric in metrics)
+            {
+                response.Metrics.Add(_mapper.Map<NetWorkMetricDto>(metric));
+            }
+
+            _logger.LogInformation($"Отработал метод GetAll");
+            return Ok(response);
+        }
+
+
+
+
+
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
         public IActionResult GetByTimePeriod(
             [FromRoute] TimeSpan fromTime,
@@ -62,12 +90,8 @@ namespace MetricsAgent.Controllers
                 };
                 foreach (var metric in metrics)
                 {
-                    response.Metrics.Add(new NetWorkMetricDto
-                    {
-                        Time = metric.Time,
-                        Value = metric.Value,
-                        Id = metric.Id
-                    });
+                    response.Metrics.Add(_mapper.Map<NetWorkMetricDto>(metric));
+
                 }
                 return Ok(response);
             }
