@@ -14,7 +14,7 @@ namespace MetricsAgent.DAL
 
     public class CpuMetricsRepository : ICpuMetricsRepository
     {
-        private const string ConnectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
+        private const string ConnectionString = "Data Source=metrics.db;Version=3;";
 
         public CpuMetricsRepository()
         {
@@ -27,7 +27,7 @@ namespace MetricsAgent.DAL
             using (var connection = new SQLiteConnection(ConnectionString))
             {
         
-                connection.Execute("INSERT INTO cpumetrics(value, time) VALUES(@value, @time)",
+                connection.Execute("INSERT INTO cpumetrics (value, time) VALUES(@value, @time)",
                 new
                 {
                     value = item.Value,
@@ -72,7 +72,6 @@ namespace MetricsAgent.DAL
             {
                 return connection.Query<CpuMetric>("SELECT Id, Time, Value FROM cpumetrics").ToList();
             }
-
         }
 
         public CpuMetric GetById(int id)
