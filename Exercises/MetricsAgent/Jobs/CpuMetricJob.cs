@@ -1,10 +1,8 @@
 ﻿using MetricsAgent.DAL.Interfaces;
 using Quartz;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MetricsAgent.Jobs
 {
@@ -22,7 +20,7 @@ namespace MetricsAgent.Jobs
         public Task Execute(IJobExecutionContext context)
         {
 
-            
+
             var cpuUsageInPercents = Convert.ToInt32(_cpuCounter.NextValue());
             var time = TimeSpan.FromSeconds(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             _repository.Create(new Models.CpuMetric
