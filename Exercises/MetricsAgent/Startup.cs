@@ -75,6 +75,11 @@ namespace MetricsAgent
             jobType: typeof(CpuMetricJob),
             cronExpression: "0/5 * * * * ?"));
 
+            services.AddSingleton<RamMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(RamMetricJob),
+            cronExpression: "0/5 * * * * ?"));
+
 
 
         }
