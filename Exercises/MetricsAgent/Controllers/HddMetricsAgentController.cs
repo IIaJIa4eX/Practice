@@ -71,7 +71,7 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(HddMetricGetByTimePeriodRequest req)
+        public IActionResult GetByTimePeriod([FromRoute] HddMetricGetByTimePeriodRequest req)
         {
             _logger.LogInformation($"Данные метода GetByTimePeriod в HddMetricsAgentController: {req.fromTime}, {req.toTime}");
 

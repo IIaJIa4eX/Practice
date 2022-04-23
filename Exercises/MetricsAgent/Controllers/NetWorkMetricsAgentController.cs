@@ -77,7 +77,7 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(NetWorkMetricGetByTimePeriodRequest req)
+        public IActionResult GetByTimePeriod([FromRoute] NetWorkMetricGetByTimePeriodRequest req)
         {
             _logger.LogInformation($"Данные метода GetByTimePeriod в NetWorkMetricsAgentController: {req.fromTime}, {req.toTime}");
 

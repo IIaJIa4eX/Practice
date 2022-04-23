@@ -70,7 +70,7 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("api/metrics/cpu/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetCpuMetrics(CpuMetricGetByTimePeriodRequest req)
+        public IActionResult GetCpuMetrics([FromRoute] CpuMetricGetByTimePeriodRequest req)
         {
             _logger.LogInformation($"Данные метода GetCpuMetrics в CpuMetricsAgentController: {req.fromTime}, {req.toTime}");
             return Ok();

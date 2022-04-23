@@ -73,7 +73,7 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(DotNetMetricGetByTimePeriodRequest req)
+        public IActionResult GetByTimePeriod([FromRoute] DotNetMetricGetByTimePeriodRequest req)
         {
             _logger.LogInformation($"Данные метода GetByTimePeriod в DotNetMetricsAgentController: {req.fromTime}, {req.toTime}");
 

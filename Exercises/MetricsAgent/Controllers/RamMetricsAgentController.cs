@@ -78,7 +78,7 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(RamMetricGetByTimePeriodRequest req)
+        public IActionResult GetByTimePeriod([FromRoute] RamMetricGetByTimePeriodRequest req)
         {
             _logger.LogInformation($"Данные метода GetByTimePeriod в RamMetricsAgentController: {req.fromTime}, {req.toTime}");
 
