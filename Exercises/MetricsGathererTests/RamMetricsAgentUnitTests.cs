@@ -3,6 +3,7 @@ using MetricsAgent.Controllers;
 using MetricsAgent.DAL;
 using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
+using MetricsAgent.Requests.RamMetricRequests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -51,7 +52,7 @@ namespace MetricsAgentTests
             var result = controller.Create(new
             MetricsAgent.Requests.RamMetricCreateRequest
             {
-                Time = TimeSpan.FromSeconds(1),
+                Time = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0)),
                 Value = 50
             });
             _mock.Verify(repository => repository.Create(It.IsAny<RamMetric>()), Times.AtMostOnce());
@@ -60,20 +61,18 @@ namespace MetricsAgentTests
         [Fact]
         public void GetByTimePeriod_ShouldCall_GetByTimePeriod_From_Repository()
         {
-            TimeSpan ts1 = new TimeSpan(12, 00, 00);
-            TimeSpan ts2 = new TimeSpan(12, 10, 00);
+            var Req = new RamMetricGetByTimePeriodRequest();
+            Req.fromTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0));
+            Req.toTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0)); ;
 
             _mock.Setup(repository => repository.GetByTimePeriod(
-                It.IsAny<TimeSpan>(),
-                It.IsAny<TimeSpan>()))
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<DateTimeOffset>()))
                 .Verifiable();
 
-            var result = controller.GetByTimePeriod(ts1, ts2);
+            var result = controller.GetByTimePeriod(Req);
 
-            _mock.Verify(repository => repository.GetByTimePeriod(
-                It.IsAny<TimeSpan>(),
-                It.IsAny<TimeSpan>()),
-                Times.AtMostOnce());
+            _mock.Verify(repository => repository.GetByTimePeriod(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()), Times.AtMostOnce());
         }
     }
 }

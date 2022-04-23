@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent.Requests
 {
-    public class DotNetMetricCreateRequest
+    public class RamMetricCreateRequest
     {
-        public TimeSpan Time { get; set; }
+        public DateTimeOffset Time { get; set; }
         public int Value { get; set; }
     }
 }

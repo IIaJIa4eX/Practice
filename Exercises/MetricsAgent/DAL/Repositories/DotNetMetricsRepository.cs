@@ -16,7 +16,8 @@ namespace MetricsAgent.DAL
 
         public DotNetMetricsRepository()
         {
-            SqlMapper.AddTypeHandler(new TimeSpanHandler());
+            
+            SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
         }
 
 
@@ -30,7 +31,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds
+                    time = item.Time.ToUnixTimeSeconds()
                 });
             }
 
@@ -58,7 +59,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds,
+                    time = item.Time.ToUnixTimeSeconds(),
                     id = item.Id
                 });
             }
@@ -85,15 +86,15 @@ namespace MetricsAgent.DAL
         }
 
 
-        public IList<DotNetMetric> GetByTimePeriod(TimeSpan fromTime, TimeSpan toTime)
+        public IList<DotNetMetric> GetByTimePeriod(DateTimeOffset fromTime, DateTimeOffset toTime)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 return connection.Query<DotNetMetric>("SELECT * FROM dotnetmetrics WHERE time >= @fromTime AND time <= @toTime",
                     new
                     {
-                        fromTime = fromTime.TotalSeconds,
-                        toTime = toTime.TotalSeconds
+                        fromTime = fromTime.ToUnixTimeSeconds(),
+                        toTime = toTime.ToUnixTimeSeconds()
                     }).ToList();
             }
         }

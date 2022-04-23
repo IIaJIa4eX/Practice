@@ -8,25 +8,27 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent.Jobs
 {
-    public class RamMetricJob : IJob
+    public class DotNetMetricJob : IJob
     {
-        private IRamMetricsRepository _repository;
-        private PerformanceCounter _ramCounter;
+        private IDotNetMetricsRepository _repository;
+        private PerformanceCounter _gcCounter;
 
-        public RamMetricJob(IRamMetricsRepository repository)
+        public DotNetMetricJob(IDotNetMetricsRepository repository)
         {
             _repository = repository;
-            _ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+           
+            _gcCounter = new PerformanceCounter(".NET CLR Memory", "Allocated Bytes/sec", "_Global_");
         }
         public Task Execute(IJobExecutionContext context)
         {
 
-            var ramUsageInPercents = Convert.ToInt32(_ramCounter.NextValue());
+
+            var gcInBytes = Convert.ToInt32(_gcCounter.NextValue());
             var time = DateTimeOffset.UtcNow.ToLocalTime();
-            _repository.Create(new Models.RamMetric
+            _repository.Create(new Models.DotNetMetric
             {
                 Time = time,
-                Value = ramUsageInPercents
+                Value = gcInBytes
             });
             return Task.CompletedTask;
 

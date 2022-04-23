@@ -5,6 +5,7 @@ using MetricsAgent.DAL;
 using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using MetricsAgent.Requests;
+using MetricsAgent.Requests.CpuMetricRequests;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -67,24 +68,23 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("api/metrics/cpu/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetCpuMetrics(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+        public IActionResult GetCpuMetrics(CpuMetricGetByTimePeriodRequest req)
         {
-            _logger.LogInformation($"Данные метода GetCpuMetrics в CpuMetricsAgentController: {fromTime}, {toTime}");
+            _logger.LogInformation($"Данные метода GetCpuMetrics в CpuMetricsAgentController: {req.fromTime}, {req.toTime}");
             return Ok();
         }
 
-        [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
-        {
-            _logger.LogInformation($"Данные метода GetByTimePeriod в CpuMetricsAgentController: {fromTime}, {toTime}");
 
+        [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
+        public IActionResult GetByTimePeriod([FromRoute] CpuMetricGetByTimePeriodRequest req)
+        {
+            _logger.LogInformation($"Данные метода GetByTimePeriod в CpuMetricsAgentController: {req.fromTime}, {req.toTime}");
+
+           
+            
             try
             {
-                var metrics = _repository.GetByTimePeriod(fromTime, toTime);
+                var metrics = _repository.GetByTimePeriod(req.fromTime,req.toTime);
                 var response = new AllCpuMetricsResponse()
                 {
                     Metrics = new List<CpuMetricDto>()

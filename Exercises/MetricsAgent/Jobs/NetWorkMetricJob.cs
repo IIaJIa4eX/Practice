@@ -13,22 +13,21 @@ namespace MetricsAgent.Jobs
 
         private INetWorkMetricsRepository _repository;
         private PerformanceCounter _netCounter;
-
+        private string _instance = "Realtek PCIe GbE Family Controller _2";
         public NetWorkMetricJob(INetWorkMetricsRepository repository)
         {
             _repository = repository;
-            _netCounter = new PerformanceCounter("Network Interface", "Bytes Total/sec");
+            _netCounter = new PerformanceCounter("Network Interface", "Bytes Total/sec", _instance);
         }
         public Task Execute(IJobExecutionContext context)
         {
-
-
-            var netUsageInPercents = Convert.ToInt32(_netCounter.NextValue());
-            var time = TimeSpan.FromSeconds(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            var netUsageInBytes = Convert.ToInt32(_netCounter.NextValue());
+            var time = DateTimeOffset.UtcNow.ToLocalTime();
             _repository.Create(new Models.NetWorkMetric
+
             {
                 Time = time,
-                Value = netUsageInPercents
+                Value = netUsageInBytes
             });
             return Task.CompletedTask;
 

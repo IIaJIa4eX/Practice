@@ -3,6 +3,7 @@ using MetricsAgent.DAL;
 using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using MetricsAgent.Requests;
+using MetricsAgent.Requests.RamMetricRequests;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -76,15 +77,13 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+        public IActionResult GetByTimePeriod(RamMetricGetByTimePeriodRequest req)
         {
-            _logger.LogInformation($"Данные метода GetByTimePeriod в RamMetricsAgentController: {fromTime}, {toTime}");
+            _logger.LogInformation($"Данные метода GetByTimePeriod в RamMetricsAgentController: {req.fromTime}, {req.toTime}");
 
             try
             {
-                var metrics = _repository.GetByTimePeriod(fromTime, toTime);
+                var metrics = _repository.GetByTimePeriod(req.fromTime, req.toTime);
                 var response = new AllRamMetricsResponse()
                 {
                     Metrics = new List<RamMetricDto>()

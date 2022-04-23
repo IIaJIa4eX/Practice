@@ -3,6 +3,7 @@ using MetricsAgent.DAL;
 using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
 using MetricsAgent.Requests;
+using MetricsAgent.Requests.NetWorkMetricRequests;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -75,15 +76,13 @@ namespace MetricsAgent.Controllers
 
 
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+        public IActionResult GetByTimePeriod(NetWorkMetricGetByTimePeriodRequest req)
         {
-            _logger.LogInformation($"Данные метода GetByTimePeriod в NetWorkMetricsAgentController: {fromTime}, {toTime}");
+            _logger.LogInformation($"Данные метода GetByTimePeriod в NetWorkMetricsAgentController: {req.fromTime}, {req.toTime}");
 
             try
             {
-                var metrics = _repository.GetByTimePeriod(fromTime, toTime);
+                var metrics = _repository.GetByTimePeriod(req.fromTime, req.toTime);
                 var response = new AllNetWorkMetricsResponse()
                 {
                     Metrics = new List<NetWorkMetricDto>()

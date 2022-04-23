@@ -17,7 +17,7 @@ namespace MetricsAgent.DAL
 
         public RamMetricsRepository()
         {
-            SqlMapper.AddTypeHandler(new TimeSpanHandler());
+            SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
         }
 
         public void Create(RamMetric item)
@@ -29,7 +29,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds
+                    time = item.Time.ToUnixTimeSeconds()
                 });
             }
 
@@ -57,7 +57,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds,
+                    time = item.Time.ToUnixTimeSeconds(),
                     id = item.Id
                 });
             }
@@ -84,15 +84,15 @@ namespace MetricsAgent.DAL
         }
 
 
-        public IList<RamMetric> GetByTimePeriod(TimeSpan fromTime, TimeSpan toTime)
+        public IList<RamMetric> GetByTimePeriod(DateTimeOffset fromTime, DateTimeOffset toTime)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 return connection.Query<RamMetric>("SELECT * FROM rammetrics WHERE time >= @fromTime AND time <= @toTime",
                     new
                     {
-                        fromTime = fromTime.TotalSeconds,
-                        toTime = toTime.TotalSeconds
+                        fromTime = fromTime.ToUnixTimeSeconds(),
+                        toTime = toTime.ToUnixTimeSeconds()
                     }).ToList();
             }
         }

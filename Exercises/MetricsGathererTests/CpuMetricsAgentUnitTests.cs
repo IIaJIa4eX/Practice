@@ -3,6 +3,8 @@ using MetricsAgent.Controllers;
 using MetricsAgent.DAL;
 using MetricsAgent.DAL.Interfaces;
 using MetricsAgent.Models;
+using MetricsAgent.Requests;
+using MetricsAgent.Requests.CpuMetricRequests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -36,11 +38,12 @@ namespace MetricsAgentTests
         public void GetMetrics_ReturnsOk()
         {
 
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+ 
+            var Req = new CpuMetricGetByTimePeriodRequest();
+            Req.fromTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0));
+            Req.toTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0)); ;
             //Act
-            var result = controller.GetCpuMetrics(fromTime,
-            toTime);
+            var result = controller.GetCpuMetrics(Req);
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
@@ -53,7 +56,7 @@ namespace MetricsAgentTests
             var result = controller.Create(new
             MetricsAgent.Requests.CpuMetricCreateRequest
             {
-                Time = TimeSpan.FromSeconds(1),
+                Time = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0)),
                 Value = 50
             });
             mock.Verify(repository => repository.Create(It.IsAny<CpuMetric>()),Times.AtMostOnce());
@@ -62,19 +65,20 @@ namespace MetricsAgentTests
         [Fact]
         public void GetByTimePeriod_ShouldCall_GetByTimePeriod_From_Repository()
         {
-            TimeSpan ts1 = new TimeSpan(12, 00, 00);
-            TimeSpan ts2 = new TimeSpan(12, 10, 00);
+            var Req = new CpuMetricGetByTimePeriodRequest();
+            Req.fromTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0));
+            Req.toTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0)); ;
 
             mock.Setup(repository => repository.GetByTimePeriod(
-                It.IsAny<TimeSpan>(),
-                It.IsAny<TimeSpan>()))
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<DateTimeOffset>()))
                 .Verifiable();
 
-            var result = controller.GetByTimePeriod(ts1,ts2);
+            var result = controller.GetByTimePeriod(Req);
 
             mock.Verify(repository => repository.GetByTimePeriod(
-                It.IsAny<TimeSpan>(),
-                It.IsAny<TimeSpan>()),
+                It.IsAny<DateTimeOffset>(),
+                It.IsAny<DateTimeOffset>()),
                 Times.AtMostOnce());
         }
 

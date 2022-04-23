@@ -17,7 +17,7 @@ namespace MetricsAgent.DAL
 
         public NetWorkMetricsRepository()
         {
-            SqlMapper.AddTypeHandler(new TimeSpanHandler());
+            SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
         }
 
 
@@ -30,7 +30,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds
+                    time = item.Time.ToUnixTimeSeconds()
                 });
             }
 
@@ -58,7 +58,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds,
+                    time = item.Time.ToUnixTimeSeconds(),
                     id = item.Id
                 });
             }
@@ -85,15 +85,15 @@ namespace MetricsAgent.DAL
         }
 
 
-        public IList<NetWorkMetric> GetByTimePeriod(TimeSpan fromTime, TimeSpan toTime)
+        public IList<NetWorkMetric> GetByTimePeriod(DateTimeOffset fromTime, DateTimeOffset toTime)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 return connection.Query<NetWorkMetric>("SELECT * FROM networkmetrics WHERE time >= @fromTime AND time <= @toTime",
                     new
                     {
-                        fromTime = fromTime.TotalSeconds,
-                        toTime = toTime.TotalSeconds
+                        fromTime = fromTime.ToUnixTimeSeconds(),
+                        toTime = toTime.ToUnixTimeSeconds()
                     }).ToList();
             }
         }

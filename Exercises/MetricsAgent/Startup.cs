@@ -85,6 +85,16 @@ namespace MetricsAgent
             jobType: typeof(NetWorkMetricJob),
             cronExpression: "0/5 * * * * ?"));
 
+            services.AddSingleton<DotNetMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(DotNetMetricJob),
+            cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<HddMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(HddMetricJob),
+            cronExpression: "0/5 * * * * ?"));
+
 
 
         }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent.Requests
 {
-    public class HddMetricCreateRequest
+    public class NetWorkMetricCreateRequest
     {
-        public TimeSpan Time { get; set; }
+        public DateTimeOffset Time { get; set; }
         public int Value { get; set; }
     }
 }

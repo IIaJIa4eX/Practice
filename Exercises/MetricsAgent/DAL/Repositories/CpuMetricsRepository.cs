@@ -18,7 +18,7 @@ namespace MetricsAgent.DAL
 
         public CpuMetricsRepository()
         {
-            SqlMapper.AddTypeHandler(new TimeSpanHandler());
+            SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
         }
 
 
@@ -31,7 +31,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds
+                    time = item.Time.ToUnixTimeSeconds()
                 });
             }
 
@@ -59,7 +59,7 @@ namespace MetricsAgent.DAL
                 new
                 {
                     value = item.Value,
-                    time = item.Time.TotalSeconds,
+                    time = item.Time.ToUnixTimeSeconds(),
                     id = item.Id
                 });
             }
@@ -85,17 +85,17 @@ namespace MetricsAgent.DAL
         }
 
 
-        public IList<CpuMetric> GetByTimePeriod(TimeSpan fromTime, TimeSpan toTime)
+        public IList<CpuMetric> GetByTimePeriod(DateTimeOffset fromTime, DateTimeOffset toTime)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
 
                 
-                return connection.Query<CpuMetric>("SELECT * FROM cpumetrics WHERE time >= @fromTime AND time <= @toTime",
+                return connection.Query<CpuMetric>("SELECT * FROM cpumetrics WHERE Time >= @fromTime AND Time <= @toTime",
                     new {
-                        fromTime = fromTime.TotalSeconds,
-                        toTime = toTime.TotalSeconds
-                        }).ToList();
+                        fromTime = fromTime.ToUnixTimeSeconds(),
+                        toTime = toTime.ToUnixTimeSeconds()
+                    }).ToList();
             }
         }
     }
