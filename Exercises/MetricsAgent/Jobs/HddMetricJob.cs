@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent.Jobs
 {
+    //to review
     public class HddMetricJob : IJob
-    {
+    {       
+
         private IHddMetricsRepository _repository;
         private PerformanceCounter _hddRCounter;
         private PerformanceCounter _hddWCounter;
