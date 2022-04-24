@@ -1,11 +1,11 @@
+using MetricsProject_ver1.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
+using Polly;
+using System;
 
 namespace MetricsProject_ver1
 {
@@ -22,7 +22,11 @@ namespace MetricsProject_ver1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddNewtonsoftJson();
+            services.AddHttpClient();
             services.AddControllers();
+
+            services.AddHttpClient<IMetricsAgentClient,
+                MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
 
         }
 

@@ -9,23 +9,19 @@ using MetricsAgent.Jobs;
 using MetricsAgent.Mapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsAgent
 {
-     //to review
+    //to review
     public class Startup
     {
 
@@ -34,7 +30,7 @@ namespace MetricsAgent
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-           
+
         }
 
         public IConfiguration Configuration { get; }
@@ -42,7 +38,7 @@ namespace MetricsAgent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
 
             services.AddControllers();
             ConfigureSqlLiteConnection(services);
@@ -117,17 +113,17 @@ namespace MetricsAgent
             TimeSpan ts1 = new TimeSpan(12, 00, 12);
             TimeSpan ts2 = new TimeSpan(12, 10, 12);
             TimeSpan ts3 = new TimeSpan(1, 12, 20, 12);
-            
+
             using (var cmd = new SQLiteCommand(connection))
             {
                 foreach (string item in dbs)
                 {
                     connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
                         new
-                    {
-                        value = 600,
-                        time = ts1.TotalSeconds
-                    });
+                        {
+                            value = 600,
+                            time = ts1.TotalSeconds
+                        });
 
                     connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
                     new
@@ -164,8 +160,8 @@ namespace MetricsAgent
         //}
 
 
-            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             //migrationRunner.MigrateUp();
@@ -187,7 +183,7 @@ namespace MetricsAgent
             using var scope = app.ApplicationServices.CreateScope();
             var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
             migrator.MigrateUp();
-            
+
         }
     }
 }

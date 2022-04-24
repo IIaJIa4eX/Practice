@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MetricsProject_ver1.Client;
+using MetricsProject_ver1.Requests;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,6 +17,7 @@ namespace MetricsProject_ver1.Controllers
 
         private readonly ILogger<HddMetricsController> _logger;
 
+        private MetricsAgentClient metricsAgentClient;
         public HddMetricsController(ILogger<HddMetricsController> logger)
         {
             _logger = logger;
@@ -24,11 +27,18 @@ namespace MetricsProject_ver1.Controllers
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAgent(
            [FromRoute] int agentId,
-           [FromRoute] TimeSpan fromTime,
-           [FromRoute] TimeSpan toTime)
+           [FromRoute] DateTimeOffset fromTime,
+           [FromRoute] DateTimeOffset toTime)
         {
-            _logger.LogInformation($"Данные метода GetMetricsFromAgent в HddMetricsController: {agentId}, {fromTime}, {toTime}");
-            return Ok();
+            _logger.LogInformation($"starting new request to metrics agent");
+
+            var metrics = metricsAgentClient.GetAllHddMetrics(new GetAllHddMetricsApiRequest //Разобраться, какой реквест должен уходить
+            {
+                fromTime = fromTime,
+                toTime = toTime
+            });
+
+            return Ok(metrics);
         }
 
         [HttpGet("cluster/from/{fromTime}/to/{toTime}")]

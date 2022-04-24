@@ -1,4 +1,5 @@
 ﻿using MetricsProject_ver1.DTO;
+using MetricsProject_ver1.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.Controllers
@@ -33,6 +36,7 @@ namespace MetricsProject_ver1.Controllers
             _logger.LogInformation($"Данные метода GetMetricsFromAgent в CpuMetricsController: {agentId}, {fromTime}, {toTime}");
 
             return Ok();
+
         }
 
         [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
