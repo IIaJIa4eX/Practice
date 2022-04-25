@@ -1,3 +1,4 @@
+using FluentMigrator.Runner;
 using MetricsProject_ver1.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,8 @@ namespace MetricsProject_ver1
 {
     public class Startup
     {
+        const string ConnectionString = "Data Source = metrics.db; Version = 3;";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +30,14 @@ namespace MetricsProject_ver1
 
             services.AddHttpClient<IMetricsAgentClient,
                 MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
+
+            services.AddFluentMigratorCore()
+           .ConfigureRunner(rb => rb
+                       .AddSQLite()
+                       .WithGlobalConnectionString(ConnectionString)
+                       .ScanIn(typeof(Startup).Assembly).For.Migrations()
+                       ).AddLogging(lb => lb
+                       .AddFluentMigratorConsole());
 
         }
 
@@ -46,6 +57,10 @@ namespace MetricsProject_ver1
             {
                 endpoints.MapControllers();
             });
+
+            using var scope = app.ApplicationServices.CreateScope();
+            var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
+            migrator.MigrateUp();
         }
     }
 }

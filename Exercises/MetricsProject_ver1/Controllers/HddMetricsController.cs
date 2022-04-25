@@ -1,12 +1,8 @@
 ﻿using MetricsProject_ver1.Client;
 using MetricsProject_ver1.Requests;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.Controllers
 {
