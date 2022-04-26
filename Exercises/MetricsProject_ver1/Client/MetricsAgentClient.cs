@@ -20,11 +20,6 @@ namespace MetricsProject_ver1.Client
             _logger = logger;
         }
 
-        public MetricsAgentClient()
-        {
-
-        }
-
 
         public AllHddMetricsApiResponse GetAllHddMetrics(GetAllHddMetricsApiRequest request)
         {

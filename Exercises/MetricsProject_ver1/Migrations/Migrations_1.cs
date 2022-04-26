@@ -45,7 +45,7 @@ namespace MetricsProject_ver1.Migrations
 
                 Create.Table("Agents")
                 .WithColumn("AgentId").AsInt64().PrimaryKey().Identity()
-                .WithColumn("AgentUrl").AsString(255);
+                .WithColumn("AgentUrl").AsString();
             }
 
             public override void Down()

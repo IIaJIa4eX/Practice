@@ -1,5 +1,8 @@
 using FluentMigrator.Runner;
 using MetricsProject_ver1.Client;
+using MetricsProject_ver1.DAL.Repositories.AgentRepositories;
+using MetricsProject_ver1.DAL.Repositories.IAgentsRepositories;
+using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +31,15 @@ namespace MetricsProject_ver1
             services.AddHttpClient();
             services.AddControllers();
 
+            services.AddSingleton<ICpuMetricsRepository, CpuMetricsRepository>();
+            services.AddSingleton<IDotNetMetricsRepository, DotNetMetricsRepository>();
+            services.AddSingleton<IHddMetricsRepository, HddMetricsRepository>();
+            services.AddSingleton<INetWorkMetricsRepository, NetWorkMetricsRepository>();
+            services.AddSingleton<IRamMetricsRepository, RamMetricsRepository>();
+            services.AddSingleton<IAgentRepository, AgentRepository>();
+
+
+
             services.AddHttpClient<IMetricsAgentClient,
                 MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
 
@@ -42,7 +54,7 @@ namespace MetricsProject_ver1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMigrationRunner migrationRunner)
         {
             if (env.IsDevelopment())
             {
@@ -58,9 +70,7 @@ namespace MetricsProject_ver1
                 endpoints.MapControllers();
             });
 
-            using var scope = app.ApplicationServices.CreateScope();
-            var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
-            migrator.MigrateUp();
+            migrationRunner.MigrateUp();
         }
     }
 }
