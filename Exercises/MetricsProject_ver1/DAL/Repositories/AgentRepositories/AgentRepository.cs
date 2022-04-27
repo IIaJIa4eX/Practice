@@ -13,22 +13,39 @@ namespace MetricsProject_ver1.DAL.Repositories.AgentRepositories
     {
         private const string ConnectionString = "Data Source=metrics.db;Version=3;";
 
+
+
         public AgentModel GetAgentById(long id)
         {
-            throw new NotImplementedException();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                return connection.QuerySingle<AgentModel>("SELECT * FROM Agents WHERE AgentId = @agentId",
+                    new
+                    {
+                        agentId = id
+                    });
+            }
         }
 
         public List<AgentModel> GetAllAgents()
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
-                return connection.Query<AgentModel>("SELECT Id, Time, Value, agentId FROM Agents").ToList();
+                return connection.Query<AgentModel>("SELECT * FROM Agents").ToList();
             }
         }
 
         public void SetNewAgent(AgentModel item)
         {
-            throw new NotImplementedException();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                connection.Execute("INSERT INTO Agents (AgentUrl) VALUES(@value)",
+                new
+                {
+                    value = item.AgentUrl,
+                });
+            }
         }
     }
 }

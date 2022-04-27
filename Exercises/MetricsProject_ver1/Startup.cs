@@ -42,7 +42,7 @@ namespace MetricsProject_ver1
             services.AddSingleton<IHddMetricsRepository, HddMetricsRepository>();
             services.AddSingleton<INetWorkMetricsRepository, NetWorkMetricsRepository>();
             services.AddSingleton<IRamMetricsRepository, RamMetricsRepository>();
-            services.AddSingleton<IRamMetricsRepository, RamMetricsRepository>();
+            services.AddSingleton<IAgentRepository, AgentRepository>();
             services.AddSingleton<IMetricsAgentClient, MetricsAgentClient>();
 
             var mapperConfiguration = new MapperConfiguration(mp => mp.AddProfile(new MapperProfile()));

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.Requests
 {
-    public class GetAllCpuMetricsApiRequest : CommonClientInfo
+    public class GetAllCpuMetricsApiRequest
     {
-        public string ClientBaseAddress = cpu_ClientAddress;
+        public string ClientBaseAddress  { get; set; }
         public DateTimeOffset fromTime { get; set; }
 
         public DateTimeOffset toTime { get; set; }
