@@ -22,7 +22,7 @@ namespace MetricsProject_ver1.DAL.Repositories.AgentRepositories
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
-                return connection.Query<AgentModel>("SELECT Id, Time, Value FROM cpumetrics").ToList();
+                return connection.Query<AgentModel>("SELECT Id, Time, Value, agentId FROM Agents").ToList();
             }
         }
 

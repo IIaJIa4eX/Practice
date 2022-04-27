@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.DAL.Repositories.IAgentsRepositories
 {
-    interface IAgentRepository : IAgentMetricsRepository<AgentModel>
+    public interface IAgentRepository : IAgentMetricsRepository<AgentModel>
     {
+
     }
 }

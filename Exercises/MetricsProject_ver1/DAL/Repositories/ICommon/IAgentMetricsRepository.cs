@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.DAL.Repositories.ICommon
 {
-    interface IAgentMetricsRepository<T> where T : class
+    public interface IAgentMetricsRepository<T> where T : class
     {
         List<T> GetAllAgents();
         T GetAgentById(long id);

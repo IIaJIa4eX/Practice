@@ -99,7 +99,7 @@ namespace MetricsProject_ver1.Controllers
                     string readQuery = "SELECT * FROM cpumetrics LIMIT 3";
                     // Создаём массив, в который запишем объекты с данными из
                     //базы данных
-                    var returnArray = new CpuMetric[3];
+                    var returnArray = new CpuMetricDTO[3];
                     // Изменяем текст команды на наш запрос чтения
                     command.CommandText = readQuery;
                     using (SQLiteDataReader reader = command.ExecuteReader())
@@ -107,11 +107,11 @@ namespace MetricsProject_ver1.Controllers
                         var counter = 0;
                         while (reader.Read())
                         {
-                            returnArray[counter] = new CpuMetric
+                            returnArray[counter] = new CpuMetricDTO
                             {
                                 Id = reader.GetInt32(0), 
                                 Value = reader.GetInt32(1), 
-                                    Time = reader.GetInt64(2)
+                                    Time = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(2))
                             };
                             counter++;
                         }

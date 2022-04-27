@@ -1,14 +1,20 @@
+using AutoMapper;
 using FluentMigrator.Runner;
 using MetricsProject_ver1.Client;
 using MetricsProject_ver1.DAL.Repositories.AgentRepositories;
 using MetricsProject_ver1.DAL.Repositories.IAgentsRepositories;
 using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
+using MetricsProject_ver1.Jobs;
+using MetricsProject_ver1.Mapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Polly;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using System;
 
 namespace MetricsProject_ver1
@@ -36,9 +42,12 @@ namespace MetricsProject_ver1
             services.AddSingleton<IHddMetricsRepository, HddMetricsRepository>();
             services.AddSingleton<INetWorkMetricsRepository, NetWorkMetricsRepository>();
             services.AddSingleton<IRamMetricsRepository, RamMetricsRepository>();
-            services.AddSingleton<IAgentRepository, AgentRepository>();
+            services.AddSingleton<IRamMetricsRepository, RamMetricsRepository>();
+            services.AddSingleton<IMetricsAgentClient, MetricsAgentClient>();
 
-
+            var mapperConfiguration = new MapperConfiguration(mp => mp.AddProfile(new MapperProfile()));
+            var mapper = mapperConfiguration.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddHttpClient<IMetricsAgentClient,
                 MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
@@ -50,6 +59,10 @@ namespace MetricsProject_ver1
                        .ScanIn(typeof(Startup).Assembly).For.Migrations()
                        ).AddLogging(lb => lb
                        .AddFluentMigratorConsole());
+
+            services.AddHostedService<QuartzHostedService>();
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
         }
 
