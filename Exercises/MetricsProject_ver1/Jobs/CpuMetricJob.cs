@@ -1,4 +1,5 @@
 ﻿using MetricsProject_ver1.Client;
+using MetricsProject_ver1.DAL.Models;
 using MetricsProject_ver1.DAL.Models.Agents;
 using MetricsProject_ver1.DAL.Repositories.IAgentsRepositories;
 using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.Jobs
 {
-    public class CpuMetricJob
+    public class CpuMetricJob : IJob
     {
         private ICpuMetricsRepository _repository;
         private IAgentRepository _agentsRepository;
@@ -37,8 +38,17 @@ namespace MetricsProject_ver1.Jobs
                 {
                     fromTime = DateTimeOffset.UtcNow.ToLocalTime(),
                     toTime = DateTimeOffset.UtcNow.AddHours(-5),
-                    ClientBaseAddress = agent.AgentUrl});
+                    ClientBaseAddress = agent.AgentUrl
+                });
+
+                foreach (var metric in metrics)
+                {
+                    _repository.AddMetric(new CpuMetric() {Value =  metric.Value, Time = metric.Time, agentId = agent.AgentId});
                 }
+
+            }
+
+                
 
             return Task.CompletedTask;
 

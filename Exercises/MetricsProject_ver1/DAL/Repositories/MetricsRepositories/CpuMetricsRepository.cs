@@ -14,16 +14,18 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
         {
             SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
         }
+
         public void AddMetric(CpuMetric item)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
 
-                connection.Execute("INSERT INTO cpumetrics (value, time) VALUES(@value, @time)",
+                connection.Execute("INSERT INTO cpumetrics (value, time, agentId) VALUES(@value, @time, @agentId)",
                 new
                 {
                     value = item.Value,
-                    time = item.Time.ToUnixTimeSeconds() // toad add agenid  и dateime
+                    time = item.Time.ToUnixTimeSeconds(),
+                    agentId = item.agentId
                 });
             }
         }

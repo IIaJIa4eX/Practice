@@ -22,6 +22,8 @@ namespace MetricsAgent.Jobs
         }
         public Task Execute(IJobExecutionContext context)
         {
+            var inst = new PerformanceCounterCategory("Network Interface").GetInstanceNames();
+
             var netUsageInBytes = Convert.ToInt32(_netCounter.NextValue());
             var time = DateTimeOffset.UtcNow.ToLocalTime();
             _repository.Create(new Models.NetWorkMetric

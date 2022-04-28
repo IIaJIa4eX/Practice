@@ -21,7 +21,7 @@ namespace MetricsProject_ver1.Client
         }
 
 
-        public AllHddMetricsApiResponse GetAllHddMetrics(GetAllHddMetricsApiRequest request)
+        public IList<AllHddMetricsApiResponse> GetAllHddMetrics(GetAllHddMetricsApiRequest request)
         {
             var fromParameter = request.fromTime;
             var toParameter = request.toTime;
@@ -31,7 +31,7 @@ namespace MetricsProject_ver1.Client
             {
                 HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
                 using var responseStream = response.Content.ReadAsStreamAsync().Result;
-                return JsonSerializer.DeserializeAsync<AllHddMetricsApiResponse>(responseStream).Result ;
+                return JsonSerializer.DeserializeAsync<IList<AllHddMetricsApiResponse>>(responseStream).Result ;
             }
             catch (Exception ex)
             {
@@ -46,7 +46,7 @@ namespace MetricsProject_ver1.Client
             throw new NotImplementedException();
         }
 
-        public AllCpuMetricsApiResponse GetCpuMetrics(GetAllCpuMetricsApiRequest request)
+        public IList<AllCpuMetricsApiResponse> GetCpuMetrics(GetAllCpuMetricsApiRequest request)
         {
             var fromParameter = request.fromTime;
             var toParameter = request.toTime;
@@ -60,7 +60,7 @@ namespace MetricsProject_ver1.Client
             {
                 HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
                 using var responseStream = response.Content.ReadAsStreamAsync().Result;
-                return JsonSerializer.DeserializeAsync<AllCpuMetricsApiResponse>(responseStream).Result; //разобраться что возвращает
+                return JsonSerializer.DeserializeAsync<IList<AllCpuMetricsApiResponse>>(responseStream).Result;
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace MetricsProject_ver1.Client
             return null;
         }
 
-        public DonNetMetricsApiResponse GetDonNetMetrics(DonNetHeapMetrisApiRequest request)
+        public IList<DonNetMetricsApiResponse> GetDonNetMetrics(DonNetHeapMetrisApiRequest request)
         {
             throw new NotImplementedException();
         }

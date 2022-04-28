@@ -64,6 +64,10 @@ namespace MetricsProject_ver1
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
+            services.AddSingleton<CpuMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(CpuMetricJob),
+            cronExpression: "0/5 * * * * ?"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -136,6 +136,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetricsProject", "MetricsProject", "{25FD424E-6A9D-432B-97F2-A6036D3AE654}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsProject_ver1", "MetricsProject_ver1\MetricsProject_ver1.csproj", "{CC0DCD17-33DB-4D04-96B4-2A641176AB67}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AA499A98-726B-40DC-B8BD-150DC1E510BB} = {AA499A98-726B-40DC-B8BD-150DC1E510BB}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManagerTests", "MetricsManagerTests\MetricsManagerTests.csproj", "{F9C670F7-6B9E-4E47-A384-0891D9D5D989}"
 EndProject
@@ -143,7 +146,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgent", "MetricsAgen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgentTests", "MetricsGathererTests\MetricsAgentTests.csproj", "{4769C00E-ECB3-4816-ADC6-EE7BDAC1F9AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{CB33E5A2-68B2-4123-9FC5-FC63106C930A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{CB33E5A2-68B2-4123-9FC5-FC63106C930A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
