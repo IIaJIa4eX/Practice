@@ -29,8 +29,8 @@ namespace MetricsManagerTests
         {
             //Arrange
             var agentId = 1;
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+            var fromTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0));
+            var toTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0));
             //Act
             var result = controller.GetMetricsFromAgent(agentId, fromTime,
             toTime);

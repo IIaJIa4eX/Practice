@@ -136,9 +136,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetricsProject", "MetricsProject", "{25FD424E-6A9D-432B-97F2-A6036D3AE654}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsProject_ver1", "MetricsProject_ver1\MetricsProject_ver1.csproj", "{CC0DCD17-33DB-4D04-96B4-2A641176AB67}"
-	ProjectSection(ProjectDependencies) = postProject
-		{AA499A98-726B-40DC-B8BD-150DC1E510BB} = {AA499A98-726B-40DC-B8BD-150DC1E510BB}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManagerTests", "MetricsManagerTests\MetricsManagerTests.csproj", "{F9C670F7-6B9E-4E47-A384-0891D9D5D989}"
 EndProject

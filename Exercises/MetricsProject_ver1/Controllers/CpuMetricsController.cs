@@ -19,18 +19,19 @@ namespace MetricsProject_ver1.Controllers
     {
 
         private readonly ILogger<CpuMetricsController> _logger;
-
-        public CpuMetricsController(ILogger<CpuMetricsController> logger)
+        private readonly HttpClient _httpClient;
+        public CpuMetricsController(ILogger<CpuMetricsController> logger, HttpClient httpClient)
         {
             _logger = logger;
             _logger.LogDebug(1, "Конструткор отработал в CpuMetricsController");
+            _httpClient = httpClient;
         }
 
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAgent(
             [FromRoute] int agentId,
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime)
         {
 
             _logger.LogInformation($"Данные метода GetMetricsFromAgent в CpuMetricsController: {agentId}, {fromTime}, {toTime}");

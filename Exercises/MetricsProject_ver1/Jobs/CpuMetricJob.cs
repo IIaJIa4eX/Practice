@@ -40,12 +40,13 @@ namespace MetricsProject_ver1.Jobs
                     toTime = DateTimeOffset.UtcNow.AddHours(-5),
                     ClientBaseAddress = agent.AgentUrl
                 });
-
-                foreach (var metric in metrics)
+                if (metrics != null)
                 {
-                    _repository.AddMetric(new CpuMetric() {Value =  metric.Value, Time = metric.Time, agentId = agent.AgentId});
+                    foreach (var metric in metrics)
+                    {
+                        _repository.AddMetric(new CpuMetric() { Value = metric.Value, Time = metric.Time, agentId = agent.AgentId });
+                    }
                 }
-
             }
 
                 

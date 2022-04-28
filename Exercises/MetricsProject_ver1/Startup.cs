@@ -49,8 +49,8 @@ namespace MetricsProject_ver1
             var mapper = mapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
 
-            services.AddHttpClient<IMetricsAgentClient,
-                MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
+            //services.AddHttpClient<IMetricsAgentClient,
+            //    MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
 
             services.AddFluentMigratorCore()
            .ConfigureRunner(rb => rb

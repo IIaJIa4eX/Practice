@@ -41,7 +41,7 @@ namespace MetricsAgent
 
 
             services.AddControllers();
-            ConfigureSqlLiteConnection(services);
+            //ConfigureSqlLiteConnection(services);
             services.AddSingleton<ICpuMetricsRepository, CpuMetricsRepository>();
             services.AddSingleton<IDotNetMetricsRepository, DotNetMetricsRepository>();
             services.AddSingleton<IHddMetricsRepository, HddMetricsRepository>();

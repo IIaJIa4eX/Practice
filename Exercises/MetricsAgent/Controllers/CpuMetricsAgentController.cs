@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MetricsAgent.Controllers
@@ -96,7 +97,7 @@ namespace MetricsAgent.Controllers
                     response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
                 }
 
-                return Ok(response);
+                return Ok(response.Metrics);
             }
             catch
             {
@@ -104,7 +105,7 @@ namespace MetricsAgent.Controllers
             }
 
             _logger.LogInformation($"Отработал метод GetByTimePeriod");
-            return Ok();
+            return null;
         }
     }
 }

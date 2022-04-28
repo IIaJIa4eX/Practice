@@ -53,14 +53,18 @@ namespace MetricsProject_ver1.Client
             var httpRequest = new HttpRequestMessage
                 (
                 HttpMethod.Get,
-                $"{request.ClientBaseAddress}/api/cpumetricsagent/getbytimeperiod/from/{fromParameter}/to/{toParameter}"
-                );
+                $"{request.ClientBaseAddress}api/cpumetricsagent/getbytimeperiod/from/{fromParameter:O}/to/{toParameter:O}"
+                );                                             
 
             try
             {
                 HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
                 using var responseStream = response.Content.ReadAsStreamAsync().Result;
-                return JsonSerializer.DeserializeAsync<IList<AllCpuMetricsApiResponse>>(responseStream).Result;
+                return JsonSerializer.DeserializeAsync<IList<AllCpuMetricsApiResponse>>
+                    (
+                    responseStream,
+                    new JsonSerializerOptions() {PropertyNameCaseInsensitive = true}
+                    ).Result;
             }
             catch (Exception ex)
             {
