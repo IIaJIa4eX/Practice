@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using MetricsProject_ver1.DAL.Models;
+using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
+using MetricsProject_ver1.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,37 +14,72 @@ namespace MetricsProject_ver1.Controllers
 {
     [Route("api/metrics/network")]
     [ApiController]
-    public class NetworkMetricsController : ControllerBase
+    public class NetWorkMetricsController : ControllerBase
     {
 
+        private readonly ILogger<NetWorkMetricsController> _logger;
+        private INetWorkMetricsRepository _repository;
+        private readonly IMapper _mapper;
 
-        private readonly ILogger<NetworkMetricsController> _logger;
-
-        public NetworkMetricsController(ILogger<NetworkMetricsController> logger)
+        public NetWorkMetricsController(ILogger<NetWorkMetricsController> logger, INetWorkMetricsRepository repository, IMapper mapper)
         {
+            _repository = repository;
+            _mapper = mapper;
             _logger = logger;
-            _logger.LogDebug(1, "Конструткор отработал в NetworkMetricsController");
+            _logger.LogDebug(1, "Конструткор отработал в CpuMetricsController");
+
         }
 
-        [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAgent(
-           [FromRoute] int agentId,
-           [FromRoute] TimeSpan fromTime,
-           [FromRoute] TimeSpan toTime)
+        [HttpGet("agent/{agentId}")]
+        public IActionResult GetMetricsFromAgent([FromRoute] int agentId)
         {
-            _logger.LogInformation($"Данные метода GetMetricsFromAgent в NetworkMetricsController: {agentId}, {fromTime}, {toTime}");
+            _logger.LogInformation($"Данные метода GetMetricsFromAgent в DotNetMetricsController: {agentId}");
 
-            return Ok();
+            IList<NetWorkMetric> metrics = _repository.GetAgentMetricById(agentId);
+            List<NetWorkMetricDTO> Metrics = new List<NetWorkMetricDTO>();
+
+            foreach (var metric in metrics)
+            {
+                Metrics.Add(_mapper.Map<NetWorkMetricDTO>(metric));
+            }
+
+            _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
+            return Ok(Metrics);
+
         }
 
-        [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAllCluster(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+        [HttpGet("cluster")]
+        public IActionResult GetMetricsFromAllCluster()
         {
 
-            _logger.LogInformation($"Данные метода GetMetricsFromAllCluster в NetworkMetricsController: {fromTime}, {toTime}");
-            return Ok();
+            IList<NetWorkMetric> metrics = _repository.GetMetricsFromAllCluster();
+            List<NetWorkMetricDTO> Metrics = new List<NetWorkMetricDTO>();
+
+            foreach (var metric in metrics)
+            {
+                Metrics.Add(_mapper.Map<NetWorkMetricDTO>(metric));
+            }
+
+            _logger.LogInformation($"Отработал метод GetMetricsFromAllCluster");
+            return Ok(Metrics);
+        }
+
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IActionResult GetMetricsByTimePeriod([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        {
+            _logger.LogInformation($"Данные метода GetMetricsByTimePeriod в DotNetMetricsController: от {fromTime} до {toTime}");
+
+            IList<NetWorkMetric> metrics = _repository.GetMetricsByTimePeriod(fromTime, toTime);
+            List<NetWorkMetricDTO> Metrics = new List<NetWorkMetricDTO>();
+
+            foreach (var metric in metrics)
+            {
+                Metrics.Add(_mapper.Map<NetWorkMetricDTO>(metric));
+            }
+
+            _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
+            return Ok(Metrics);
+
         }
     }
 }

@@ -36,8 +36,9 @@ namespace MetricsProject_ver1.Jobs
             {
                 var metrics = _clientAgent.GetCpuMetrics(new GetAllCpuMetricsApiRequest()
                 {
-                    fromTime = DateTimeOffset.UtcNow.ToLocalTime(),
-                    toTime = DateTimeOffset.UtcNow.AddHours(-5),
+                   
+                    fromTime = DateTimeOffset.UtcNow.AddHours(-5),
+                    toTime = DateTimeOffset.UtcNow.ToLocalTime(),
                     ClientBaseAddress = agent.AgentUrl
                 });
                 if (metrics != null)

@@ -1,13 +1,19 @@
 ﻿using Dapper;
 using MetricsProject_ver1.DAL.Models;
+using MetricsProject_ver1.DAL.Repositories.Common;
 using MetricsProject_ver1.Mapper;
 using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
 
 namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
 {
     public class HddMetricsRepository : IHddMetricsRepository
     {
         private const string ConnectionString = "Data Source=metrics.db;Version=3;";
+
+
         public HddMetricsRepository()
         {
             SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
@@ -15,12 +21,54 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
 
         public void AddMetric(HddMetric item)
         {
-            throw new NotImplementedException();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                connection.Execute("INSERT INTO hddmetrics (value, time, agentId) VALUES(@value, @time, @agentId)",
+                new
+                {
+                    value = item.Value,
+                    time = item.Time.ToUnixTimeSeconds(),
+                    agentId = item.agentId
+                });
+            }
         }
 
-        public HddMetric GetAgentMetricById(int id)
+
+        public IList<HddMetric> GetMetricsByTimePeriod(DateTimeOffset fromTime, DateTimeOffset toTime)
         {
-            throw new NotImplementedException();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+
+                return connection.Query<HddMetric>("SELECT * FROM hddmetrics WHERE Time >= @fromTime AND Time <= @toTime",
+                    new
+                    {
+                        fromTime = fromTime.ToUnixTimeSeconds(),
+                        toTime = toTime.ToUnixTimeSeconds()
+                    }).ToList();
+            }
+        }
+
+        public IList<HddMetric> GetMetricsFromAllCluster()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                return connection.Query<HddMetric>("SELECT * FROM hddmetrics").ToList();
+            }
+        }
+
+        public IList<HddMetric> GetAgentMetricById(int id)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                return connection.Query<HddMetric>("SELECT * FROM hddmetrics WHERE Id = @id",
+                    new
+                    {
+                        id = id
+                    }).ToList();
+            }
         }
     }
 }

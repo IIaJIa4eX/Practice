@@ -25,13 +25,21 @@ namespace MetricsProject_ver1.Client
         {
             var fromParameter = request.fromTime;
             var toParameter = request.toTime;
-            var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{request.ClientBaseAddress}/api/hddmetrics/from/{fromParameter}/to/{toParameter}");
+            var httpRequest = new HttpRequestMessage
+                (
+                HttpMethod.Get,
+                $"{request.ClientBaseAddress}api/hddmetricsagent/getbytimeperiod/from/{fromParameter:O}/to/{toParameter:O}"
+                );
 
             try
             {
                 HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
                 using var responseStream = response.Content.ReadAsStreamAsync().Result;
-                return JsonSerializer.DeserializeAsync<IList<AllHddMetricsApiResponse>>(responseStream).Result ;
+                return JsonSerializer.DeserializeAsync<IList<AllHddMetricsApiResponse>>
+                    (
+                    responseStream,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
+                    ).Result;
             }
             catch (Exception ex)
             {
@@ -41,9 +49,31 @@ namespace MetricsProject_ver1.Client
         }   
       
 
-        public AllRamMetricsApiResponse GetAllRamMetrics(GetAllRamMetricsApiRequest request)
+        public IList<AllRamMetricsApiResponse> GetAllRamMetrics(GetAllRamMetricsApiRequest request)
         {
-            throw new NotImplementedException();
+            var fromParameter = request.fromTime;
+            var toParameter = request.toTime;
+            var httpRequest = new HttpRequestMessage
+                (
+                HttpMethod.Get,
+                $"{request.ClientBaseAddress}api/rammetricsagent/getbytimeperiod/from/{fromParameter:O}/to/{toParameter:O}"
+                );
+
+            try
+            {
+                HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
+                using var responseStream = response.Content.ReadAsStreamAsync().Result;
+                return JsonSerializer.DeserializeAsync<IList<AllRamMetricsApiResponse>>
+                    (
+                    responseStream,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
+                    ).Result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return null;
         }
 
         public IList<AllCpuMetricsApiResponse> GetCpuMetrics(GetAllCpuMetricsApiRequest request)
@@ -75,12 +105,56 @@ namespace MetricsProject_ver1.Client
 
         public IList<DonNetMetricsApiResponse> GetDonNetMetrics(DonNetHeapMetrisApiRequest request)
         {
-            throw new NotImplementedException();
+            var fromParameter = request.fromTime;
+            var toParameter = request.toTime;
+            var httpRequest = new HttpRequestMessage
+                (
+                HttpMethod.Get,
+                $"{request.ClientBaseAddress}api/dotnetmetricsagent/getbytimeperiod/from/{fromParameter:O}/to/{toParameter:O}"
+                );
+
+            try
+            {
+                HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
+                using var responseStream = response.Content.ReadAsStreamAsync().Result;
+                return JsonSerializer.DeserializeAsync<IList<DonNetMetricsApiResponse>>
+                    (
+                    responseStream,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
+                    ).Result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return null;
         }
 
-        public AllNetWorkMetricsApiResponse GetNetWorkMetrics(GetAllNetWorkTrafficMetricsApiRequest request)
+        public IList<AllNetWorkMetricsApiResponse> GetNetWorkMetrics(GetAllNetWorkTrafficMetricsApiRequest request)
         {
-            throw new NotImplementedException();
+            var fromParameter = request.fromTime;
+            var toParameter = request.toTime;
+            var httpRequest = new HttpRequestMessage
+                (
+                HttpMethod.Get,
+                $"{request.ClientBaseAddress}api/networkmetricsagent/getbytimeperiod/from/{fromParameter:O}/to/{toParameter:O}"
+                );
+
+            try
+            {
+                HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
+                using var responseStream = response.Content.ReadAsStreamAsync().Result;
+                return JsonSerializer.DeserializeAsync<IList<AllNetWorkMetricsApiResponse>>
+                    (
+                    responseStream,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
+                    ).Result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return null;
         }
     }
 }

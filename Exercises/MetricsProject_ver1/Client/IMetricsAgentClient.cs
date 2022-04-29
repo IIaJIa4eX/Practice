@@ -9,10 +9,10 @@ namespace MetricsProject_ver1.Client
 {
     public interface IMetricsAgentClient
     {
-        AllRamMetricsApiResponse GetAllRamMetrics(GetAllRamMetricsApiRequest request);
+        IList<AllRamMetricsApiResponse> GetAllRamMetrics(GetAllRamMetricsApiRequest request);
         IList<AllHddMetricsApiResponse> GetAllHddMetrics(GetAllHddMetricsApiRequest request);
         IList<DonNetMetricsApiResponse> GetDonNetMetrics(DonNetHeapMetrisApiRequest request);
         IList<AllCpuMetricsApiResponse> GetCpuMetrics(GetAllCpuMetricsApiRequest request);
-        AllNetWorkMetricsApiResponse GetNetWorkMetrics(GetAllNetWorkTrafficMetricsApiRequest request);
+        IList<AllNetWorkMetricsApiResponse> GetNetWorkMetrics(GetAllNetWorkTrafficMetricsApiRequest request);
     }
 }

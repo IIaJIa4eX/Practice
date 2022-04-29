@@ -2,6 +2,9 @@
 using MetricsProject_ver1.DAL.Models;
 using MetricsProject_ver1.Mapper;
 using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
 
 namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
 {
@@ -16,12 +19,54 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
 
         public void AddMetric(RamMetric item)
         {
-            throw new NotImplementedException();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                connection.Execute("INSERT INTO rammetrics (value, time, agentId) VALUES(@value, @time, @agentId)",
+                new
+                {
+                    value = item.Value,
+                    time = item.Time.ToUnixTimeSeconds(),
+                    agentId = item.agentId
+                });
+            }
         }
 
-        public RamMetric GetAgentMetricById(int id)
+
+        public IList<RamMetric> GetMetricsByTimePeriod(DateTimeOffset fromTime, DateTimeOffset toTime)
         {
-            throw new NotImplementedException();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+
+                return connection.Query<RamMetric>("SELECT * FROM rammetrics WHERE Time >= @fromTime AND Time <= @toTime",
+                    new
+                    {
+                        fromTime = fromTime.ToUnixTimeSeconds(),
+                        toTime = toTime.ToUnixTimeSeconds()
+                    }).ToList();
+            }
+        }
+
+        public IList<RamMetric> GetMetricsFromAllCluster()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                return connection.Query<RamMetric>("SELECT * FROM rammetrics").ToList();
+            }
+        }
+
+        public IList<RamMetric> GetAgentMetricById(int id)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                return connection.Query<RamMetric>("SELECT * FROM rammetrics WHERE Id = @id",
+                    new
+                    {
+                        id = id
+                    }).ToList();
+            }
         }
     }
 }

@@ -33,10 +33,11 @@ namespace MetricsProject_ver1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddControllers();
             services.AddMvc().AddNewtonsoftJson();
             services.AddHttpClient();
-            services.AddControllers();
-
+            
             services.AddSingleton<ICpuMetricsRepository, CpuMetricsRepository>();
             services.AddSingleton<IDotNetMetricsRepository, DotNetMetricsRepository>();
             services.AddSingleton<IHddMetricsRepository, HddMetricsRepository>();
@@ -67,6 +68,26 @@ namespace MetricsProject_ver1
             services.AddSingleton<CpuMetricJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(CpuMetricJob),
+            cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<NetWorkMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(NetWorkMetricJob),
+            cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<RamMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(RamMetricJob),
+            cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<DotNetMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(DotNetMetricJob),
+            cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<HddMetricJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(HddMetricJob),
             cronExpression: "0/5 * * * * ?"));
         }
 

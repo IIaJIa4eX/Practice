@@ -9,7 +9,11 @@ namespace MetricsProject_ver1.DAL.Repositories.Common
     {
 
         void AddMetric(T item);
-        T GetAgentMetricById(int id);
+        IList<T> GetAgentMetricById(int id);
+
+        IList<T> GetMetricsFromAllCluster();
+
+        IList<T> GetMetricsByTimePeriod(DateTimeOffset item, DateTimeOffset item2);
     }
 
 }

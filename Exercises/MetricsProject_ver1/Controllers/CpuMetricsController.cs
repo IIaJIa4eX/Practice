@@ -1,4 +1,7 @@
-﻿using MetricsProject_ver1.DTO;
+﻿using AutoMapper;
+using MetricsProject_ver1.DAL.Models;
+using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
+using MetricsProject_ver1.DTO;
 using MetricsProject_ver1.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,110 +22,71 @@ namespace MetricsProject_ver1.Controllers
     {
 
         private readonly ILogger<CpuMetricsController> _logger;
-        private readonly HttpClient _httpClient;
-        public CpuMetricsController(ILogger<CpuMetricsController> logger, HttpClient httpClient)
+        private ICpuMetricsRepository _repository;
+        private readonly IMapper _mapper;
+
+        public CpuMetricsController(ILogger<CpuMetricsController> logger, ICpuMetricsRepository repository, IMapper mapper)
         {
+            _repository = repository;
+            _mapper = mapper;
             _logger = logger;
             _logger.LogDebug(1, "Конструткор отработал в CpuMetricsController");
-            _httpClient = httpClient;
-        }
-
-        [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAgent(
-            [FromRoute] int agentId,
-            [FromRoute] DateTimeOffset fromTime,
-            [FromRoute] DateTimeOffset toTime)
-        {
-
-            _logger.LogInformation($"Данные метода GetMetricsFromAgent в CpuMetricsController: {agentId}, {fromTime}, {toTime}");
-
-            return Ok();
 
         }
 
-        [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAllCluster(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+        [HttpGet("agent/{agentId}")]
+        public IActionResult GetMetricsFromAgent([FromRoute] int agentId)
         {
+            _logger.LogInformation($"Данные метода GetMetricsFromAgent в CpuMetricsController: {agentId}");
 
-            _logger.LogInformation($"Данные метода GetMetricsFromAllCluster в CpuMetricsController: {fromTime}, {toTime}");
-            return Ok();
-        }
+            IList<CpuMetric> metrics = _repository.GetAgentMetricById(agentId);
+            List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
 
-        [HttpGet("sql-test")]
-        public IActionResult TryToSqlLite()
-        {
-            string cs = "Data Source=:memory:";
-            string stm = "SELECT SQLITE_VERSION()";
-            using (var con = new SQLiteConnection(cs))
+            foreach (var metric in metrics)
             {
-                con.Open();
-                using var cmd = new SQLiteCommand(stm, con);
-                string version = cmd.ExecuteScalar().ToString();
-                return Ok(version);
+                Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
             }
+
+            _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
+            return Ok(Metrics);
+
         }
 
-        [HttpGet("sql-read-write-test")]
-        public IActionResult TryToInsertAndRead()
+        [HttpGet("cluster")]
+        public IActionResult GetMetricsFromAllCluster()
         {
-            // Создаём строку подключения в виде базы данных в оперативной
 
-            string connectionString = "Data Source=:memory:";
-            // Создаём соединение с базой данных
-            using (var connection = new SQLiteConnection(connectionString))
+            IList<CpuMetric> metrics = _repository.GetMetricsFromAllCluster();
+            List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
+
+            foreach (var metric in metrics)
             {
-                // Открываем соединение
-                connection.Open();
-                using (var command = new SQLiteCommand(connection))
-                {
-                    command.CommandText = "DROP TABLE IF EXISTS cpumetrics";
-                    // Отправляем запрос в базу данных
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"CREATE TABLE cpumetrics(id INTEGER
-                    PRIMARY KEY,
-                    value INT, time INT)";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = "INSERT INTO cpumetrics(value, time)VALUES(10, 1)";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "INSERT INTO cpumetrics(value, time)VALUES(50, 2)";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "INSERT INTO cpumetrics(value, time)VALUES(75, 4)";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "INSERT INTO cpumetrics(value, time)VALUES(90, 5)";
-                    command.ExecuteNonQuery();
-
-                    // Создаём строку для выборки данных из базы
-                    // LIMIT 3 обозначает, что мы достанем только 3 записи
-                    string readQuery = "SELECT * FROM cpumetrics LIMIT 3";
-                    // Создаём массив, в который запишем объекты с данными из
-                    //базы данных
-                    var returnArray = new CpuMetricDTO[3];
-                    // Изменяем текст команды на наш запрос чтения
-                    command.CommandText = readQuery;
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        var counter = 0;
-                        while (reader.Read())
-                        {
-                            returnArray[counter] = new CpuMetricDTO
-                            {
-                                Id = reader.GetInt32(0), 
-                                Value = reader.GetInt32(1), 
-                                    Time = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(2))
-                            };
-                            counter++;
-                        }
-                    }
-
-                    return Ok(returnArray);
-                }
-
+                Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
             }
+
+            _logger.LogInformation($"Отработал метод GetMetricsFromAllCluster");
+            return Ok(Metrics);
         }
+
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IActionResult GetMetricsByTimePeriod([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        {
+            _logger.LogInformation($"Данные метода GetMetricsByTimePeriod в CpuMetricsController: от {fromTime} до {toTime}");
+
+            IList<CpuMetric> metrics = _repository.GetMetricsByTimePeriod(fromTime, toTime);
+            List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
+
+            foreach (var metric in metrics)
+            {
+                Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
+            }
+
+            _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
+            return Ok(Metrics);
+
+        }
+
+
 
     }
 }
