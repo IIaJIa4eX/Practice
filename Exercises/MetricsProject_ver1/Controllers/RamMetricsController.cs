@@ -17,11 +17,11 @@ namespace MetricsProject_ver1.Controllers
     public class RamMetricsController : ControllerBase
     {
 
-        private readonly ILogger<NetWorkMetricsController> _logger;
+        private readonly ILogger<RamMetricsController> _logger;
         private IRamMetricsRepository _repository;
         private readonly IMapper _mapper;
 
-        public RamMetricsController(ILogger<NetWorkMetricsController> logger, IRamMetricsRepository repository, IMapper mapper)
+        public RamMetricsController(ILogger<RamMetricsController> logger, IRamMetricsRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -34,34 +34,46 @@ namespace MetricsProject_ver1.Controllers
         public IActionResult GetMetricsFromAgent([FromRoute] int agentId)
         {
             _logger.LogInformation($"Данные метода GetMetricsFromAgent в DotNetMetricsController: {agentId}");
-
-            IList<RamMetric> metrics = _repository.GetAgentMetricById(agentId);
-            List<RamMetricDTO> Metrics = new List<RamMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<RamMetricDTO>(metric));
-            }
+                IList<RamMetric> metrics = _repository.GetAgentMetricById(agentId);
+                List<RamMetricDTO> Metrics = new List<RamMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<RamMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
-            return Ok(Metrics);
+            return Ok();
 
         }
 
         [HttpGet("cluster")]
         public IActionResult GetMetricsFromAllCluster()
         {
-
-            IList<RamMetric> metrics = _repository.GetMetricsFromAllCluster();
-            List<RamMetricDTO> Metrics = new List<RamMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<RamMetricDTO>(metric));
-            }
+                IList<RamMetric> metrics = _repository.GetMetricsFromAllCluster();
+                List<RamMetricDTO> Metrics = new List<RamMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<RamMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAllCluster");
-            return Ok(Metrics);
+            return Ok();
         }
 
         [HttpGet("from/{fromTime}/to/{toTime}")]

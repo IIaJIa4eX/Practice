@@ -1,4 +1,6 @@
-﻿using MetricsProject_ver1.Controllers;
+﻿using AutoMapper;
+using MetricsProject_ver1.Controllers;
+using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -13,16 +15,17 @@ namespace MetricsManagerTests
 {
     public class DotNetMetricsControllerUnitTests
     {
-        private DotNetMetricsController controller;
-        private Mock<DotNetMetricsController> mock;
-        private Mock<ILogger<DotNetMetricsController>> mockLog;
+        private DotNetMetricsController _controller;
+        private Mock<IDotNetMetricsRepository> _mock;
+        private Mock<ILogger<DotNetMetricsController>> _mockLog;
+        private Mock<IMapper> mockMap;
         public DotNetMetricsControllerUnitTests()
         {
-            mockLog = new Mock<ILogger<DotNetMetricsController>>();
-            ILogger<DotNetMetricsController> logger = mockLog.Object;
-            mock = new Mock<DotNetMetricsController>();
-
-            controller = new DotNetMetricsController(logger);
+            _mockLog = new Mock<ILogger<DotNetMetricsController>>();
+            ILogger<DotNetMetricsController> logger = _mockLog.Object;
+            _mock = new Mock<IDotNetMetricsRepository>();
+            mockMap = new Mock<IMapper>();
+            _controller = new DotNetMetricsController(logger, _mock.Object, mockMap.Object);
         }
 
 
@@ -34,8 +37,7 @@ namespace MetricsManagerTests
             var fromTime = TimeSpan.FromSeconds(0);
             var toTime = TimeSpan.FromSeconds(100);
             //Act
-            var result = controller.GetMetricsFromAgent(agentId, fromTime,
-            toTime);
+            var result = _controller.GetMetricsFromAgent(agentId);
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
@@ -47,8 +49,7 @@ namespace MetricsManagerTests
             var fromTime = TimeSpan.FromSeconds(0);
             var toTime = TimeSpan.FromSeconds(100);
             //Act
-            var result = controller.GetMetricsFromAllCluster(fromTime,
-            toTime);
+            var result = _controller.GetMetricsFromAllCluster();
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }

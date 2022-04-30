@@ -34,33 +34,46 @@ namespace MetricsProject_ver1.Controllers
         {
             _logger.LogInformation($"Данные метода GetMetricsFromAgent в DotNetMetricsController: {agentId}");
 
-            IList<HddMetric> metrics = _repository.GetAgentMetricById(agentId);
-            List<HddMetricDTO> Metrics = new List<HddMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<HddMetricDTO>(metric));
-            }
+                IList<HddMetric> metrics = _repository.GetAgentMetricById(agentId);
+                List<HddMetricDTO> Metrics = new List<HddMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<HddMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
-            return Ok(Metrics);
+            return Ok();
 
         }
 
         [HttpGet("cluster")]
         public IActionResult GetMetricsFromAllCluster()
         {
-
-            IList<HddMetric> metrics = _repository.GetMetricsFromAllCluster();
-            List<HddMetricDTO> Metrics = new List<HddMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<HddMetricDTO>(metric));
-            }
+                IList<HddMetric> metrics = _repository.GetMetricsFromAllCluster();
+                List<HddMetricDTO> Metrics = new List<HddMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<HddMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAllCluster");
-            return Ok(Metrics);
+            return Ok();
         }
 
         [HttpGet("from/{fromTime}/to/{toTime}")]

@@ -14,7 +14,7 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
         private const string ConnectionString = "Data Source=metrics.db;Version=3;";
        
 
-        public CpuMetricsRepository(ICpuMetricsRepository repository)
+        public CpuMetricsRepository()
         {         
 
             SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
@@ -69,6 +69,18 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
                     {
                         id = id
                     }).ToList();
+            }
+        }
+
+
+
+        DateTimeOffset IMetricsRepository<CpuMetric>.GetLastMetric(long id)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {        
+                var time = connection.QueryFirstOrDefault<DateTimeOffset>("SELECT MAX(Time) FROM cpumetrics WHERE agentId = @id", new { id = id });
+
+                return connection.QueryFirstOrDefault<DateTimeOffset>("SELECT MAX(Time) FROM cpumetrics WHERE agentId = @id", new { id = id });
             }
         }
     }

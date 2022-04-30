@@ -1,4 +1,6 @@
-﻿using MetricsProject_ver1.Controllers;
+﻿using AutoMapper;
+using MetricsProject_ver1.Controllers;
+using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -14,15 +16,16 @@ namespace MetricsManagerTests
     public class HddMetricsControllerUnitTests
     {
         private HddMetricsController controller;
-        private Mock<HddMetricsController> mock;
-        private Mock<ILogger<HddMetricsController>> mockLog;
+        private Mock<IHddMetricsRepository> _mock;
+        private Mock<ILogger<HddMetricsController>> _mockLog;
+        private Mock<IMapper> mockMap;
         public HddMetricsControllerUnitTests()
         {
-            mockLog = new Mock<ILogger<HddMetricsController>>();
-            ILogger<HddMetricsController> logger = mockLog.Object;
-            mock = new Mock<HddMetricsController>();
-
-            controller = new HddMetricsController(logger);
+            _mockLog = new Mock<ILogger<HddMetricsController>>();
+            ILogger<HddMetricsController> logger = _mockLog.Object;
+            _mock = new Mock<IHddMetricsRepository>();
+            mockMap = new Mock<IMapper>();
+            controller = new HddMetricsController(logger, _mock.Object, mockMap.Object);
         }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()
@@ -32,8 +35,7 @@ namespace MetricsManagerTests
             var fromTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0));
             var toTime = new DateTimeOffset(2022, 4, 22, 15, 30, 00, new TimeSpan(+3, 0, 0));
             //Act
-            var result = controller.GetMetricsFromAgent(agentId, fromTime,
-            toTime);
+            var result = controller.GetMetricsFromAgent(agentId);
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
@@ -45,8 +47,7 @@ namespace MetricsManagerTests
             var fromTime = TimeSpan.FromSeconds(0);
             var toTime = TimeSpan.FromSeconds(100);
             //Act
-            var result = controller.GetMetricsFromAllCluster(fromTime,
-            toTime);
+            var result = controller.GetMetricsFromAllCluster();
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }

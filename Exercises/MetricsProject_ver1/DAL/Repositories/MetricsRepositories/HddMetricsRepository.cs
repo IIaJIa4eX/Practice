@@ -53,8 +53,9 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
         public IList<HddMetric> GetMetricsFromAllCluster()
         {
             using (var connection = new SQLiteConnection(ConnectionString))
-            {
-                return connection.Query<HddMetric>("SELECT * FROM hddmetrics").ToList();
+            {               
+
+                return connection.Query<HddMetric>("SELECT Id, Time, Value, agentId FROM hddmetrics").ToList();
             }
         }
 
@@ -63,11 +64,20 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
             using (var connection = new SQLiteConnection(ConnectionString))
             {
 
+
                 return connection.Query<HddMetric>("SELECT * FROM hddmetrics WHERE Id = @id",
                     new
                     {
                         id = id
                     }).ToList();
+            }
+        }
+
+        public DateTimeOffset GetLastMetric(long id)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                return connection.QueryFirstOrDefault<DateTimeOffset>("SELECT MAX(Time) FROM hddmetrics WHERE agentId = @id", new { id = id });
             }
         }
     }

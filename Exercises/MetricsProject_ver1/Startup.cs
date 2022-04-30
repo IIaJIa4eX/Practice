@@ -6,6 +6,7 @@ using MetricsProject_ver1.DAL.Repositories.IAgentsRepositories;
 using MetricsProject_ver1.DAL.Repositories.MetricsRepositories;
 using MetricsProject_ver1.Jobs;
 using MetricsProject_ver1.Mapper;
+using MetricsProject_ver1.Migrations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,7 @@ namespace MetricsProject_ver1
         {
 
             services.AddControllers();
-            services.AddMvc().AddNewtonsoftJson();
+            
             services.AddHttpClient();
             
             services.AddSingleton<ICpuMetricsRepository, CpuMetricsRepository>();
@@ -45,19 +46,20 @@ namespace MetricsProject_ver1
             services.AddSingleton<IRamMetricsRepository, RamMetricsRepository>();
             services.AddSingleton<IAgentRepository, AgentRepository>();
             services.AddSingleton<IMetricsAgentClient, MetricsAgentClient>();
+            services.AddMvc().AddNewtonsoftJson();
 
             var mapperConfiguration = new MapperConfiguration(mp => mp.AddProfile(new MapperProfile()));
             var mapper = mapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
 
-            //services.AddHttpClient<IMetricsAgentClient,
-            //    MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
+            services.AddHttpClient<IMetricsAgentClient,
+                MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
 
             services.AddFluentMigratorCore()
            .ConfigureRunner(rb => rb
                        .AddSQLite()
                        .WithGlobalConnectionString(ConnectionString)
-                       .ScanIn(typeof(Startup).Assembly).For.Migrations()
+                       .ScanIn(typeof(Migrations_1).Assembly).For.Migrations()
                        ).AddLogging(lb => lb
                        .AddFluentMigratorConsole());
 

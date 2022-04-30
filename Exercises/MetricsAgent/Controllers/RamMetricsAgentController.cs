@@ -71,7 +71,7 @@ namespace MetricsAgent.Controllers
             }
 
             _logger.LogInformation($"Отработал метод GetAll");
-            return Ok(response);
+            return Ok(response.Metrics);
         }
 
 
@@ -93,7 +93,7 @@ namespace MetricsAgent.Controllers
                 {
                     response.Metrics.Add(_mapper.Map<RamMetricDto>(metric));
                 }
-                return Ok(response);
+                return Ok(response.Metrics);
             }
             catch
             {

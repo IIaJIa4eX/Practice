@@ -33,10 +33,12 @@ namespace MetricsProject_ver1.Jobs
 
             foreach (AgentModel agent in agents)
             {
+                var fromTime = _repository.GetLastMetric(agent.AgentId).ToLocalTime();
+
                 var metrics = _clientAgent.GetAllHddMetrics(new GetAllHddMetricsApiRequest()
                 {
 
-                    fromTime = DateTimeOffset.UtcNow.AddHours(-5),
+                    fromTime = fromTime.AddSeconds(1),
                     toTime = DateTimeOffset.UtcNow.ToLocalTime(),
                     ClientBaseAddress = agent.AgentUrl
                 });

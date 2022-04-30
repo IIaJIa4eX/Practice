@@ -65,7 +65,7 @@ namespace MetricsAgent.Controllers
             }
 
             _logger.LogInformation($"Отработал метод GetAll");
-            return Ok(response);
+            return Ok(response.Metrics);
         }
 
 

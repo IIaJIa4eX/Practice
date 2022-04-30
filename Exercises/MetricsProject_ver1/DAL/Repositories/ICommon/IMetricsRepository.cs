@@ -14,6 +14,8 @@ namespace MetricsProject_ver1.DAL.Repositories.Common
         IList<T> GetMetricsFromAllCluster();
 
         IList<T> GetMetricsByTimePeriod(DateTimeOffset item, DateTimeOffset item2);
+
+        DateTimeOffset GetLastMetric(long id);
     }
 
 }

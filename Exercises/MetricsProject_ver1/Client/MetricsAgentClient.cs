@@ -35,6 +35,7 @@ namespace MetricsProject_ver1.Client
             {
                 HttpResponseMessage response = _httpClient.SendAsync(httpRequest).Result;
                 using var responseStream = response.Content.ReadAsStreamAsync().Result;
+
                 return JsonSerializer.DeserializeAsync<IList<AllHddMetricsApiResponse>>
                     (
                     responseStream,

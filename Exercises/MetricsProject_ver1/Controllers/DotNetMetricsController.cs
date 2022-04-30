@@ -35,16 +35,23 @@ namespace MetricsProject_ver1.Controllers
         {
             _logger.LogInformation($"Данные метода GetMetricsFromAgent в DotNetMetricsController: {agentId}");
 
-            IList<DotNetMetric> metrics = _repository.GetAgentMetricById(agentId);
-            List<DotNetMetricDTO> Metrics = new List<DotNetMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<DotNetMetricDTO>(metric));
-            }
+                IList<DotNetMetric> metrics = _repository.GetAgentMetricById(agentId);
+                List<DotNetMetricDTO> Metrics = new List<DotNetMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<DotNetMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
-            return Ok(Metrics);
+            return Ok("Что-то пошло не так");
 
         }
 
@@ -52,16 +59,23 @@ namespace MetricsProject_ver1.Controllers
         public IActionResult GetMetricsFromAllCluster()
         {
 
-            IList<DotNetMetric> metrics = _repository.GetMetricsFromAllCluster();
-            List<DotNetMetricDTO> Metrics = new List<DotNetMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<DotNetMetricDTO>(metric));
-            }
+                IList<DotNetMetric> metrics = _repository.GetMetricsFromAllCluster();
+                List<DotNetMetricDTO> Metrics = new List<DotNetMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<DotNetMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAllCluster");
-            return Ok(Metrics);
+            return Ok("Что-то пошло не так");
         }
 
         [HttpGet("from/{fromTime}/to/{toTime}")]

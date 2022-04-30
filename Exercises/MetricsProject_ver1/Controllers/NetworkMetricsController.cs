@@ -34,17 +34,24 @@ namespace MetricsProject_ver1.Controllers
         public IActionResult GetMetricsFromAgent([FromRoute] int agentId)
         {
             _logger.LogInformation($"Данные метода GetMetricsFromAgent в DotNetMetricsController: {agentId}");
-
-            IList<NetWorkMetric> metrics = _repository.GetAgentMetricById(agentId);
-            List<NetWorkMetricDTO> Metrics = new List<NetWorkMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<NetWorkMetricDTO>(metric));
-            }
+                IList<NetWorkMetric> metrics = _repository.GetAgentMetricById(agentId);
+                List<NetWorkMetricDTO> Metrics = new List<NetWorkMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<NetWorkMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            } 
             _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
-            return Ok(Metrics);
+            return Ok();
+
 
         }
 
@@ -52,16 +59,23 @@ namespace MetricsProject_ver1.Controllers
         public IActionResult GetMetricsFromAllCluster()
         {
 
-            IList<NetWorkMetric> metrics = _repository.GetMetricsFromAllCluster();
-            List<NetWorkMetricDTO> Metrics = new List<NetWorkMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<NetWorkMetricDTO>(metric));
-            }
+                IList<NetWorkMetric> metrics = _repository.GetMetricsFromAllCluster();
+                List<NetWorkMetricDTO> Metrics = new List<NetWorkMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<NetWorkMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAllCluster");
-            return Ok(Metrics);
+            return Ok();
         }
 
         [HttpGet("from/{fromTime}/to/{toTime}")]

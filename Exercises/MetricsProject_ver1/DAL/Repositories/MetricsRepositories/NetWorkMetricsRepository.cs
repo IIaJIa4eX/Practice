@@ -70,5 +70,13 @@ namespace MetricsProject_ver1.DAL.Repositories.MetricsRepositories
                     }).ToList();
             }
         }
+
+        public DateTimeOffset GetLastMetric(long id)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                return connection.QueryFirstOrDefault<DateTimeOffset>("SELECT MAX(Time) FROM networkmetrics WHERE agentId = @id", new { id = id });
+            }
+        }
     }
 }

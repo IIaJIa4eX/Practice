@@ -37,52 +37,75 @@ namespace MetricsProject_ver1.Controllers
         [HttpGet("agent/{agentId}")]
         public IActionResult GetMetricsFromAgent([FromRoute] int agentId)
         {
-            _logger.LogInformation($"Данные метода GetMetricsFromAgent в CpuMetricsController: {agentId}");
-
-            IList<CpuMetric> metrics = _repository.GetAgentMetricById(agentId);
-            List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
+                _logger.LogInformation($"Данные метода GetMetricsFromAgent в CpuMetricsController: {agentId}");
+
+                IList<CpuMetric> metrics = _repository.GetAgentMetricById(agentId);
+                List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
+
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
+                }
+
+                _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
+                return Ok(Metrics);
             }
+            catch
+            {
 
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
-            return Ok(Metrics);
-
+            return Ok();
         }
 
         [HttpGet("cluster")]
         public IActionResult GetMetricsFromAllCluster()
         {
 
-            IList<CpuMetric> metrics = _repository.GetMetricsFromAllCluster();
-            List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
-            }
+                IList<CpuMetric> metrics = _repository.GetMetricsFromAllCluster();
+                List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
 
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+                
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAllCluster");
-            return Ok(Metrics);
+            return Ok("Что-то пошло не так");
         }
 
         [HttpGet("from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsByTimePeriod([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
-            _logger.LogInformation($"Данные метода GetMetricsByTimePeriod в CpuMetricsController: от {fromTime} до {toTime}");
-
-            IList<CpuMetric> metrics = _repository.GetMetricsByTimePeriod(fromTime, toTime);
-            List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
-
-            foreach (var metric in metrics)
+            try
             {
-                Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
-            }
+                _logger.LogInformation($"Данные метода GetMetricsByTimePeriod в CpuMetricsController: от {fromTime} до {toTime}");
 
+                IList<CpuMetric> metrics = _repository.GetMetricsByTimePeriod(fromTime, toTime);
+                List<CpuMetricDTO> Metrics = new List<CpuMetricDTO>();
+
+                foreach (var metric in metrics)
+                {
+                    Metrics.Add(_mapper.Map<CpuMetricDTO>(metric));
+
+                }
+                return Ok(Metrics);
+            }
+            catch
+            {
+
+            }
             _logger.LogInformation($"Отработал метод GetMetricsFromAgent");
-            return Ok(Metrics);
+            return Ok("Что-то пошло не так");
 
         }
 

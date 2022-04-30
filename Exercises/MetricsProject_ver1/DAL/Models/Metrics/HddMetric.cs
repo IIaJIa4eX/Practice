@@ -7,7 +7,7 @@ namespace MetricsProject_ver1.DAL.Models
 {
     public class HddMetric
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int Value { get; set; }
         public DateTimeOffset Time { get; set; }
         public long agentId { get; set; }
