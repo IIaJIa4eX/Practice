@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.Migrations
 {
+    //to review
     [Migration(1)]
     public class Migrations_1 : Migration
     {

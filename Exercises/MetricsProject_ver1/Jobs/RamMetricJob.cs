@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace MetricsProject_ver1.Jobs
 {
+    //to review
     public class RamMetricJob : IJob
     {
         private IRamMetricsRepository _repository;
