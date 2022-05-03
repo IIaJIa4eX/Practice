@@ -12,12 +12,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
+using System.Reflection;
 
 namespace MetricsAgent
 {
@@ -26,7 +29,6 @@ namespace MetricsAgent
     {
 
         const string ConnectionString = "Data Source = metrics.db; Version = 3;";
-        private List<string> dbs = new List<string>() { "cpumetrics", "dotnetmetrics", "hddmetrics", "networkmetrics", "rammetrics" };
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,9 +41,9 @@ namespace MetricsAgent
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            
             services.AddControllers();
-            //ConfigureSqlLiteConnection(services);
+
             services.AddSingleton<ICpuMetricsRepository, CpuMetricsRepository>();
             services.AddSingleton<IDotNetMetricsRepository, DotNetMetricsRepository>();
             services.AddSingleton<IHddMetricsRepository, HddMetricsRepository>();
@@ -93,71 +95,36 @@ namespace MetricsAgent
             cronExpression: "0/5 * * * * ?"));
 
 
-
-        }
-
-        private void ConfigureSqlLiteConnection(IServiceCollection services)
-        {
-            //const string connectionString = "Data Source = metrics.db; Version = 3; Pooling = true; Max Pool Size = 100; ";
-            var connection = new SQLiteConnection(ConnectionString);
-            connection.Open();
-
-
-
-            //PrepareSchema(connection);
-            //PrepareData(connection);
-        }
-
-        private void PrepareData(SQLiteConnection connection)
-        {
-            TimeSpan ts1 = new TimeSpan(12, 00, 12);
-            TimeSpan ts2 = new TimeSpan(12, 10, 12);
-            TimeSpan ts3 = new TimeSpan(1, 12, 20, 12);
-
-            using (var cmd = new SQLiteCommand(connection))
+            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
             {
-                foreach (string item in dbs)
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
-                        new
-                        {
-                            value = 600,
-                            time = ts1.TotalSeconds
-                        });
-
-                    connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
-                    new
+                    Version = "v1.00",
+                    Title = "API сервиса агента сбора метрик",
+                    Description = "Здесь можно поиграть с api нашего сервиса",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
                     {
-                        value = 700,
-                        time = ts2.TotalSeconds
-                    });
-
-                    connection.Execute($"INSERT INTO {item}(value, time) VALUES(@value, @time)",
-                    new
+                        Name = "Alex",
+                        Email = string.Empty,
+                        Url = new Uri("https://github.com/IIaJIa4eX/Practice"),
+                    },
+                    License = new OpenApiLicense
                     {
-                        value = 800,
-                        time = ts3.TotalSeconds
-                    });
-                }
-            }
+                        Name = "Лицензия",
+                        Url = new Uri("https://example.com/license"),
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
+
+
         }
-        //private void PrepareSchema(SQLiteConnection connection)
-        //{
-        //    using (var command = new SQLiteCommand(connection))
-        //    {
-        //        foreach (string item in dbs)
-        //        {
-        //            command.CommandText = $"DROP TABLE IF EXISTS {item}";
-        //            command.ExecuteNonQuery();
-
-        //            command.CommandText = $@"CREATE TABLE {item}(id INTEGER
-        //            PRIMARY KEY,
-        //            value INT, time INT)";
-        //            command.ExecuteNonQuery();
-        //        }
-
-        //    }
-        //}
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -183,6 +150,15 @@ namespace MetricsAgent
             using var scope = app.ApplicationServices.CreateScope();
             var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
             migrator.MigrateUp();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API сервиса агента сбора метрик");
+                c.RoutePrefix = string.Empty;
+            });
+
 
         }
     }

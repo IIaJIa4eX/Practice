@@ -38,6 +38,30 @@ namespace MetricsAgent.Controllers
             
         }
 
+
+
+
+
+        /// <summary>
+        /// Создать метрику CPU
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// POST api/сpumetricsagent/create
+        /// <param name="Time">метрика времени в формате 2022-01-01T00:00:00+03:00</param>
+        /// Content-type - JSON
+        /// Пример body запроса:
+        /// {
+        ///     "Value" = 100,
+        ///     "Time" = "2022-05-03T12:22:55+03:00"
+        /// }
+        /// </remarks>
+        /// 
+        /// <returns>Создает указанную метрику, за указанное время</returns>
+        /// <response code="201">Если всё хорошо</response>
+        /// <response code="400">Если передали неправильные параметры</response>
+        /// 
         [HttpPost("create")]
         public IActionResult Create([FromBody] CpuMetricCreateRequest request)
         {
@@ -50,6 +74,22 @@ namespace MetricsAgent.Controllers
             return Ok();
         }
 
+
+
+        /// <summary>
+        /// Получает все метрики CPU, за всё время
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/сpumetricsagent/all
+        ///
+        /// </remarks>
+        /// 
+        /// <returns>Список метрик за всё время</returns>
+        /// <response code="201">Если всё хорошо</response>
+        /// <response code="400">Если передали неправильные параметры</response>
+        /// 
         [HttpGet("all")]
         public IActionResult GetAll()
         {
@@ -78,6 +118,22 @@ namespace MetricsAgent.Controllers
         }
 
 
+
+        /// <summary>
+        /// Получает метрики CPU на заданном диапазоне времени
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/сpumetricsagent/getbytimeperiod/from/2022-05-03T12:22:55+03:00/to/2022-05-03T12:26:40+03:00
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начальная метрика времени в формате 2022-01-01T00:00:00+03:00</param>
+        /// <param name="toTime">конечная метрика времени в секундах с 2099-01-01T00:00:00+03:00</param>
+        /// <returns>Список метрик, сохранённых в заданном диапазоне времени</returns>
+        /// <response code="201">Если всё хорошо</response>
+        /// <response code="400">Если передали неправильные параметры</response>
+        /// 
         [HttpGet("getbytimeperiod/from/{fromTime}/to/{toTime}")]
         public IActionResult GetByTimePeriod([FromRoute] CpuMetricGetByTimePeriodRequest req)
         {
