@@ -22,9 +22,15 @@ namespace MetricsAgent.Jobs
         }
         public Task Execute(IJobExecutionContext context)
         {
-
-
-            var gcInBytes = Convert.ToInt32(_gcCounter.NextValue());
+            int gcInBytes;
+            try
+            {
+                gcInBytes = Convert.ToInt32(_gcCounter.NextValue());
+            }
+            catch
+            {
+                gcInBytes = 0;
+            }
             var time = DateTimeOffset.UtcNow.ToLocalTime();
             _repository.Create(new Models.DotNetMetric
             {

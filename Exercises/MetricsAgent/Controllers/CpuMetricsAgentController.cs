@@ -137,9 +137,7 @@ namespace MetricsAgent.Controllers
         public IActionResult GetByTimePeriod([FromRoute] CpuMetricGetByTimePeriodRequest req)
         {
             _logger.LogInformation($"Данные метода GetByTimePeriod в CpuMetricsAgentController: {req.fromTime}, {req.toTime}");
-
-           
-            
+                 
             try
             {
                 var metrics = _repository.GetByTimePeriod(req.fromTime,req.toTime);
@@ -160,6 +158,37 @@ namespace MetricsAgent.Controllers
             }
 
             _logger.LogInformation($"Отработал метод GetByTimePeriod");
+            return null;
+        }
+
+
+        /// <summary>
+        /// Получает последнюю метрику CPU
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/сpumetricsagent/getlastvalue
+        ///
+        /// </remarks>
+        /// 
+        /// <returns>Последняя метрика</returns>
+        /// <response code="201">Если всё хорошо</response>
+        /// <response code="400">Если передали неправильные параметры</response>
+        /// 
+        [HttpGet("getlastvalue")]
+        public IActionResult GetByTimePeriod()
+        {
+
+            try
+            {
+                var lastMetric = _repository.GetLastValue();
+                return Ok(lastMetric);
+            }
+            catch
+            {
+
+            }
             return null;
         }
     }

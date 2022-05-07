@@ -24,5 +24,20 @@ namespace MetricsDeskTopClient
         {
             InitializeComponent();
         }
+
+        private void CpuControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void HddControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RamControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

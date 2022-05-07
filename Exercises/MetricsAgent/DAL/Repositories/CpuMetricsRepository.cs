@@ -98,5 +98,16 @@ namespace MetricsAgent.DAL
                     }).ToList();
             }
         }
+
+
+        public CpuMetric GetLastValue()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                return connection.QuerySingle<CpuMetric>("SELECT Id, Value, Time FROM cpumetrics WHERE Time = (SELECT MAX(Time) FROM cpumetrics)");
+            }
+        }
+
     }
 }

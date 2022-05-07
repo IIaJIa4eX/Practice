@@ -97,5 +97,14 @@ namespace MetricsAgent.DAL
                     }).ToList();
             }
         }
+
+        public NetWorkMetric GetLastValue()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                return connection.QuerySingle<NetWorkMetric>("SELECT Id, Value, Time FROM networkmetrics WHERE Time = (SELECT MAX(Time) FROM networkmetrics)");
+            }
+        }
     }
 }

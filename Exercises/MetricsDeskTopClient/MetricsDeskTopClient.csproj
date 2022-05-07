@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <Compile Remove="MetricsControls\**" />
+    <EmbeddedResource Remove="MetricsControls\**" />
+    <None Remove="MetricsControls\**" />
+    <Page Remove="MetricsControls\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MetricsControls\" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
   </ItemGroup>
 
 </Project>

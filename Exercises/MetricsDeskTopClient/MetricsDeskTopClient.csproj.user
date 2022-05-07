@@ -7,15 +7,39 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="UserControl.xaml.cs">
+    <Compile Update="Controls\CpuControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\DotNetControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\HddControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\NetWorkControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\RamControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="MainWindow.xaml">
+    <Page Update="Controls\CpuControl.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControl.xaml">
+    <Page Update="Controls\DotNetControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\HddControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\NetWorkControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\RamControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

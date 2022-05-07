@@ -99,5 +99,13 @@ namespace MetricsAgent.DAL
             }
         }
 
+        public DotNetMetric GetLastValue()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                return connection.QuerySingle<DotNetMetric>("SELECT Id, Value, Time FROM dotnetmetrics WHERE Time = (SELECT MAX(Time) FROM dotnetmetrics)");
+            }
+        }
     }
 }

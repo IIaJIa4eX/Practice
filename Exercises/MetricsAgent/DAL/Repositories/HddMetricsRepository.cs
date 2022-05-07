@@ -98,5 +98,14 @@ namespace MetricsAgent.DAL
             }
         }
 
+        public HddMetric GetLastValue()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                return connection.QuerySingle<HddMetric>("SELECT Id, Value, Time FROM hddmetrics WHERE Time = (SELECT MAX(Time) FROM hddmetrics)");
+            }
+        }
+
     }
 }

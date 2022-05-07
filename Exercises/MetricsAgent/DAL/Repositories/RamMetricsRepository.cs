@@ -96,5 +96,14 @@ namespace MetricsAgent.DAL
                     }).ToList();
             }
         }
+
+        public RamMetric GetLastValue()
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+
+                return connection.QuerySingle<RamMetric>("SELECT Id, Value, Time FROM rammetrics WHERE Time = (SELECT MAX(Time) FROM rammetrics)");
+            }
+        }
     }
 }

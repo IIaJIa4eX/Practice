@@ -146,5 +146,35 @@ namespace MetricsAgent.Controllers
             _logger.LogInformation($"Отработал метод GetByTimePeriod");
             return Ok();
         }
+
+        /// <summary>
+        /// Получает последнюю метрику HDD
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/hddmetricsagent/getlastvalue
+        ///
+        /// </remarks>
+        /// 
+        /// <returns>Последняя метрика</returns>
+        /// <response code="201">Если всё хорошо</response>
+        /// <response code="400">Если передали неправильные параметры</response>
+        /// 
+        [HttpGet("getlastvalue")]
+        public IActionResult GetByTimePeriod()
+        {
+
+            try
+            {
+                var lastMetric = _repository.GetLastValue();
+                return Ok(lastMetric);
+            }
+            catch
+            {
+
+            }
+            return null;
+        }
     }
 }
