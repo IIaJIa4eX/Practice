@@ -8,19 +8,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="950" Width="1300">
     <Grid>
-        <Controls:CpuControl Margin="10,10,727,0" VerticalAlignment="Top" Height="300"/>
-        <Controls:DotNetControl Margin="727,10,10,0" VerticalAlignment="Top" Height="300" RenderTransformOrigin="0.5,0.5">
-            <Controls:DotNetControl.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleY="0.253"/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="-1.144"/>
-                </TransformGroup>
-            </Controls:DotNetControl.RenderTransform>
+        <Controls:CpuControl x:Name="cpu" Margin="10,10,727,0" VerticalAlignment="Top" Height="300"/>
+        <Controls:DotNetControl x:Name="dotnet" Margin="727,10,10,0" VerticalAlignment="Top" Height="300" RenderTransformOrigin="0.5,0.5">
         </Controls:DotNetControl>
-        <Controls:HddControl HorizontalAlignment="Right" VerticalAlignment="Top" Height="300" Width="564" Loaded="HddControl_Loaded" Margin="0,315,10,0" />
-        <Controls:NetWorkControl Margin="0,620,385,0" VerticalAlignment="Top" Height="300" HorizontalAlignment="Right" Width="563"/>
-        <Controls:RamControl Margin="10,315,714,0" Height="300" VerticalAlignment="Top"/>
+        <Controls:HddControl x:Name="hdd" VerticalAlignment="Top" Height="300" Loaded="HddControl_Loaded" Margin="726,315,10,0" />
+        <Controls:NetWorkControl x:Name="network" Margin="0,620,385,14" HorizontalAlignment="Right" Width="563"/>
+        <Controls:RamControl x:Name="ram" Margin="10,315,714,0" Height="300" VerticalAlignment="Top"/>
+        <Button x:Name="Start"  Content="Старт" HorizontalAlignment="Left" Margin="634,290,0,0" VerticalAlignment="Top" Click="Button_Click" Width="35" Height="20"/>
+        <Button Content="Стоп" HorizontalAlignment="Left" Margin="634,339,0,0" VerticalAlignment="Top" Width="35" Height="20" Click="Button_Click_1"/>
     </Grid>
 </Window>

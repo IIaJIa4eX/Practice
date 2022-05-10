@@ -83,7 +83,19 @@ namespace MetricsDeskTopClient.Controls
 
         }
 
-        private void UpdateOnСlick(object sender, RoutedEventArgs e)
+        private void SetValues()
+        {
+
+            if (fullInfoMetric.Count > 0)
+            {
+                MetricsTextBlock.Children.Clear();
+                foreach (AllNetWorkMetricsApiResponse item in fullInfoMetric)
+                {
+                    MetricsTextBlock.Children.Add(new TextBlock() { Text = $"{item.Value:F2}Кб/сек  {item.Time.DateTime}" });
+                }
+            }
+        }
+        public void UpdateOnСlick(object sender, RoutedEventArgs e)
         {
             var netWorkMetric = _metricsAgentClient.GetLastNetWorkMetrics(new GetAllNetWorkTrafficMetricsApiRequest()
             {
@@ -96,6 +108,7 @@ namespace MetricsDeskTopClient.Controls
 
 
                 CheckCount(netWorkMetric);
+                SetValues();
                 float value = netWorkMetric.Value;
 
 

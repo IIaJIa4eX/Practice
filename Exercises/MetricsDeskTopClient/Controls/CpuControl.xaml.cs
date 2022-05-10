@@ -42,8 +42,8 @@ namespace MetricsDeskTopClient.Controls
             _metricsAgentClient = new MetricsAgentClient(new HttpClient());
             _metrics = new List<float>();
             fullInfoMetric = new List<AllCpuMetricsApiResponse>();
-
-          }
+            
+        }
 
 
         public SeriesCollection ColumnSeriesValues
@@ -84,7 +84,20 @@ namespace MetricsDeskTopClient.Controls
 
         }
 
-        private void UpdateOnСlick(object sender, RoutedEventArgs e)
+        private void SetValues()
+        {
+            
+            if (fullInfoMetric.Count > 0)
+            {
+                MetricsTextBlock.Children.Clear();
+                foreach (AllCpuMetricsApiResponse item in fullInfoMetric)
+                {
+                    MetricsTextBlock.Children.Add(new TextBlock() {Text = $"{item.Value:F2}%  {item.Time.DateTime}" });
+                }
+            }
+        }
+
+        public void UpdateOnСlick(object sender, RoutedEventArgs e)
         {
             var cpuMetric = _metricsAgentClient.GetLastCpuMetrics(new GetAllCpuMetricsApiRequest()
             {
@@ -97,6 +110,37 @@ namespace MetricsDeskTopClient.Controls
 
 
                 CheckCount(cpuMetric);
+                SetValues();
+                float value = cpuMetric.Value;
+
+                PercentTextBlock.Text = $"{value:F2}";
+                
+
+                ColumnSeriesValues = new SeriesCollection()
+                {
+                    new ColumnSeries()
+                    {
+                        Values = new ChartValues<float>(_metrics)
+                    }
+                };
+            }
+           
+        }
+
+        public void UpdateInfo()
+        {
+            var cpuMetric = _metricsAgentClient.GetLastCpuMetrics(new GetAllCpuMetricsApiRequest()
+            {
+                ClientBaseAddress = "http://localhost:8000"
+            });
+
+
+            if (cpuMetric != null)
+            {
+
+
+                CheckCount(cpuMetric);
+                SetValues();
                 float value = cpuMetric.Value;
 
                 PercentTextBlock.Text = $"{value:F2}";

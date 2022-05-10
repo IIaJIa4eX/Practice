@@ -83,7 +83,20 @@ namespace MetricsDeskTopClient.Controls
 
         }
 
-        private void UpdateOnСlick(object sender, RoutedEventArgs e)
+        private void SetValues()
+        {
+
+            if (fullInfoMetric.Count > 0)
+            {
+                MetricsTextBlock.Children.Clear();
+                foreach (DonNetMetricsApiResponse item in fullInfoMetric)
+                {
+                    MetricsTextBlock.Children.Add(new TextBlock() { Text = $"{item.Value:F2}Кб  {item.Time.DateTime}" });
+                }
+            }
+        }
+
+        public void UpdateOnСlick(object sender, RoutedEventArgs e)
         {
             var dotNetMetric = _metricsAgentClient.GetLastDonNetMetrics(new DonNetHeapMetrisApiRequest()
             {
@@ -96,6 +109,8 @@ namespace MetricsDeskTopClient.Controls
 
 
                 CheckCount(dotNetMetric);
+                SetValues();
+
                 double value = dotNetMetric.Value * 0.001;
 
 

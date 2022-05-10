@@ -83,7 +83,19 @@ namespace MetricsDeskTopClient.Controls
 
         }
 
-        private void UpdateOnСlick(object sender, RoutedEventArgs e)
+        private void SetValues()
+        {
+
+            if (fullInfoMetric.Count > 0)
+            {
+                MetricsTextBlock.Children.Clear();
+                foreach (AllHddMetricsApiResponse item in fullInfoMetric)
+                {
+                    MetricsTextBlock.Children.Add(new TextBlock() { Text = $"{item.Value:F2}Кб/сек  {item.Time.DateTime}" });
+                }
+            }
+        }
+        public void UpdateOnСlick(object sender, RoutedEventArgs e)
         {
             var hddMetric = _metricsAgentClient.GetLastHddMetrics(new GetAllHddMetricsApiRequest()
             {
@@ -96,6 +108,7 @@ namespace MetricsDeskTopClient.Controls
 
 
                 CheckCount(hddMetric);
+                SetValues();
                 float value = hddMetric.Value;
 
                 PercentTextBlock.Text = $"{value:F2}";

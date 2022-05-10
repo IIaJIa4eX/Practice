@@ -83,7 +83,20 @@ namespace MetricsDeskTopClient.Controls
 
         }
 
-        private void UpdateOnСlick(object sender, RoutedEventArgs e)
+        private void SetValues()
+        {
+
+            if (fullInfoMetric.Count > 0)
+            {
+                MetricsTextBlock.Children.Clear();
+                foreach (AllRamMetricsApiResponse item in fullInfoMetric)
+                {
+                    MetricsTextBlock.Children.Add(new TextBlock() { Text = $"{item.Value:F2}Мб  {item.Time.DateTime}" });
+                }
+            }
+        }
+
+        public void UpdateOnСlick(object sender, RoutedEventArgs e)
         {
             var ramMetric = _metricsAgentClient.GetLastRamMetrics(new GetAllRamMetricsApiRequest()
             {
@@ -96,6 +109,7 @@ namespace MetricsDeskTopClient.Controls
 
 
                 CheckCount(ramMetric);
+                SetValues();
                 float value = ramMetric.Value;
 
 
