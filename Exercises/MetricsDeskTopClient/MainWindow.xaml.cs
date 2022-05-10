@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 
 namespace MetricsDeskTopClient
 {
+    //to review
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

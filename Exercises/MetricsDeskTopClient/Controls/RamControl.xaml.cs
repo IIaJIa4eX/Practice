@@ -22,6 +22,7 @@ using System.Windows.Shapes;
 
 namespace MetricsDeskTopClient.Controls
 {
+    //to review
     /// <summary>
     /// Логика взаимодействия для RamControl.xaml
     /// </summary>

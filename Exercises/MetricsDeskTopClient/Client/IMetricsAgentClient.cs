@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace MetricsDeskTopClient.Client
 {
+    //to review
     public interface IMetricsAgentClient
     {
         AllRamMetricsApiResponse GetLastRamMetrics(GetAllRamMetricsApiRequest request);
