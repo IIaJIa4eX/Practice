@@ -1,0 +1,20 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MetricsDeskTopClient"
+        xmlns:Controls="clr-namespace:MetricsDeskTopClient.Controls" x:Class="MetricsDeskTopClient.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="950" Width="1300">
+    <Grid>
+        <Controls:CpuControl x:Name="cpu" Margin="10,10,727,0" VerticalAlignment="Top" Height="300"/>
+        <Controls:DotNetControl x:Name="dotnet" Margin="727,10,10,0" VerticalAlignment="Top" Height="300" RenderTransformOrigin="0.5,0.5">
+        </Controls:DotNetControl>
+        <Controls:HddControl x:Name="hdd" VerticalAlignment="Top" Height="300" Loaded="HddControl_Loaded" Margin="726,315,10,0" />
+        <Controls:NetWorkControl x:Name="network" Margin="0,620,385,14" HorizontalAlignment="Right" Width="563"/>
+        <Controls:RamControl x:Name="ram" Margin="10,315,714,0" Height="300" VerticalAlignment="Top"/>
+        <Button x:Name="Start"  Content="Старт" HorizontalAlignment="Left" Margin="634,290,0,0" VerticalAlignment="Top" Click="Button_Click" Width="35" Height="20"/>
+        <Button Content="Стоп" HorizontalAlignment="Left" Margin="634,339,0,0" VerticalAlignment="Top" Width="35" Height="20" Click="Button_Click_1"/>
+    </Grid>
+</Window>
